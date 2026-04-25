@@ -65,6 +65,9 @@ interface StoreState {
   fetchLeaderboard: () => Promise<void>;
   fetchGeoData: () => Promise<void>;
   fetchMlas: () => Promise<void>;
+  reopenIssue: (id: number) => Promise<boolean>;
+  groupIssues: (primaryId: number, otherIds: number[]) => Promise<boolean>;
+  batchUpdateIssues: (ids: number[], status: string, summary?: string) => Promise<boolean>;
   setSelectedConstituency: (id: string | null) => void;
   toggleLiveMode: () => void;
 }
@@ -190,6 +193,39 @@ export const useStore = create<StoreState>((set, get) => ({
       set({ mlas: res.data });
     } catch (e) {
       console.error('[fetchMlas]', e);
+    }
+  },
+  
+  reopenIssue: async (id) => {
+    try {
+      await api.patch(`/issues/${id}/reopen`);
+      await get().fetchIssues();
+      return true;
+    } catch (e) {
+      console.error('[reopenIssue]', e);
+      return false;
+    }
+  },
+
+  groupIssues: async (primaryId, otherIds) => {
+    try {
+      await api.post('/issues/group', { primaryId, otherIds });
+      await get().fetchIssues();
+      return true;
+    } catch (e) {
+      console.error('[groupIssues]', e);
+      return false;
+    }
+  },
+
+  batchUpdateIssues: async (ids, status, summary) => {
+    try {
+      await api.post('/issues/batch', { ids, status, resolution_summary: summary });
+      await get().fetchIssues();
+      return true;
+    } catch (e) {
+      console.error('[batchUpdateIssues]', e);
+      return false;
     }
   },
 

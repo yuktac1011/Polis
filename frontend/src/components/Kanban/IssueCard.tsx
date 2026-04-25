@@ -7,9 +7,9 @@ interface IssueCardProps {
   onDragStart: () => void;
   onUpvote?: () => void;
   currentUserHash?: string;
+  isSelected?: boolean;
+  onSelect?: (id: number) => void;
 }
-
-
 
 // Generate a pseudo-ID like INF-204 based on issue.id and category
 const getTicketId = (issue: Issue) => {
@@ -18,7 +18,7 @@ const getTicketId = (issue: Issue) => {
   return `${prefix}-${num.toString().padStart(3, '0')}`;
 };
 
-export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote }) => {
+export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote, isSelected, onSelect }) => {
   const isResolved = issue.status === 'Resolved';
 
   return (
@@ -27,12 +27,23 @@ export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, o
       layoutId={`issue-${issue.id}`}
       draggable
       onDragStart={onDragStart}
+      onClick={() => onSelect?.(issue.id)}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileDrag={{ scale: 1.04, rotate: 1.5, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.2)', cursor: 'grabbing' }}
-      className={`rounded-xl border border-outline-variant border-l-[4px] p-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.03)] transition-all group cursor-grab active:cursor-grabbing relative overflow-hidden ${col.border} ${col.bg}`}
+      className={`rounded-xl border border-l-[4px] p-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.03)] transition-all group cursor-grab active:cursor-grabbing relative overflow-hidden ${
+        isSelected ? 'border-primary ring-2 ring-primary/20' : 'border-outline-variant'
+      } ${col.border} ${col.bg}`}
     >
+      {/* Selection Checkbox */}
+      <div className={`absolute top-2 right-2 transition-all ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+          isSelected ? 'bg-primary border-primary' : 'border-outline-variant'
+        }`}>
+          {isSelected && <span className="material-symbols-outlined text-[14px] text-on-primary">check</span>}
+        </div>
+      </div>
       {/* Top row */}
       <div className="flex items-start justify-between mb-sm">
         <div className="flex items-center gap-xs text-outline opacity-0 group-hover:opacity-100 transition-opacity absolute top-md right-md">

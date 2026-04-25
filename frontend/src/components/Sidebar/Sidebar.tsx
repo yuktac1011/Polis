@@ -26,9 +26,21 @@ export function Sidebar({ currentView, onNavigate, isMLA }: SidebarProps) {
     },
     {
       id: 'KANBAN',
-      label: 'Civic Issues',
+      label: isMLA ? 'Manage Issues' : 'Civic Issues',
       icon: 'report_problem',
-      show: isMLA,
+      show: true,
+    },
+    {
+      id: 'MY_ISSUES',
+      label: 'My Issues',
+      icon: 'inventory_2',
+      show: !isMLA,
+    },
+    {
+      id: 'LEADERBOARD',
+      label: 'Leaderboard',
+      icon: 'leaderboard',
+      show: true,
     },
     {
       id: 'MAP',

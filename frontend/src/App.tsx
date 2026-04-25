@@ -6,8 +6,9 @@ import { KanbanBoard } from './components/Kanban/Board';
 import { Leaderboard } from './components/Leaderboard/Leaderboard';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { TopBar } from './components/TopBar/TopBar';
+import { MyIssues } from './components/MyIssues/MyIssues';
 
-type View = 'MAP' | 'KANBAN' | 'LEADERBOARD';
+type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'MY_ISSUES';
 
 function App() {
   const { currentUser, fetchIssues, isLiveMode, toggleLiveMode } = useStore();
@@ -58,6 +59,14 @@ function App() {
               <KanbanBoard />
             </div>
           )}
+
+          <div className="absolute inset-0 bg-background overflow-y-auto" style={{
+            visibility: view === 'MY_ISSUES' ? 'visible' : 'hidden',
+            zIndex: view === 'MY_ISSUES' ? 10 : 0,
+            pointerEvents: view === 'MY_ISSUES' ? 'auto' : 'none',
+          }}>
+             <MyIssues />
+          </div>
 
           {/* LEADERBOARD */}
           <div className="absolute inset-0 bg-background overflow-y-auto" style={{
