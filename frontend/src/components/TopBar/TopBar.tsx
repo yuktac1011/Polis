@@ -54,16 +54,6 @@ export function TopBar({ onLiveToggle, isLiveMode }: TopBarProps) {
             {isLiveMode ? 'Pulse Active' : 'Start Pulse'}
           </button>
 
-          {/* Trailing Icons */}
-          <button className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out relative">
-            <span className="material-symbols-outlined">notifications</span>
-            {isMLA && <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-error"></span>}
-          </button>
-          
-          <button className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
-            <span className="material-symbols-outlined">settings</span>
-          </button>
-          
           <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 mx-xs"></div>
           
           {/* Profile */}

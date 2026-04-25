@@ -32,6 +32,17 @@ export function initDb() {
       FOREIGN KEY(mla_id) REFERENCES mlas(id)
     );
 
+    CREATE TABLE IF NOT EXISTS projects (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      mla_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'Planning' CHECK(status IN ('Planning', 'In Progress', 'Completed')),
+      budget TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY(mla_id) REFERENCES mlas(id)
+    );
+
     CREATE TABLE IF NOT EXISTS issues (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       category TEXT NOT NULL,
@@ -44,8 +55,10 @@ export function initDb() {
       reporter_hash TEXT NOT NULL,
       resolution_summary TEXT,
       parent_issue_id INTEGER,
+      project_id INTEGER,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY(parent_issue_id) REFERENCES issues(id) ON DELETE SET NULL
+      FOREIGN KEY(parent_issue_id) REFERENCES issues(id) ON DELETE SET NULL,
+      FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE SET NULL
     );
 
     CREATE TABLE IF NOT EXISTS upvotes (
@@ -55,6 +68,13 @@ export function initDb() {
       FOREIGN KEY(issue_id) REFERENCES issues(id) ON DELETE CASCADE
     );
   `);
+
+  // Migration: Add project_id to issues if not present
+  try {
+    db.exec('ALTER TABLE issues ADD COLUMN project_id INTEGER REFERENCES projects(id) ON DELETE SET NULL');
+  } catch (e) {
+    // Column likely already exists
+  }
 
   // Seed MLAs ONLY if the table is empty
   const mlasCountResult = db.prepare('SELECT COUNT(*) as count FROM mlas').get() as { count: number };

@@ -60,7 +60,7 @@ const MapControls: React.FC<{ trigger: number }> = ({ trigger }) => {
 // ─── Main Component ────────────────────────────────────────────────────────────
 export const MapContainer: React.FC = () => {
   const {
-    issues, currentUser, selectedConstituency, setSelectedConstituency,
+    issues, trendingIssues, currentUser, selectedConstituency, setSelectedConstituency,
     createIssue, geoData, fetchGeoData, isLiveMode, mlas, fetchMlas,
   } = useStore();
 
@@ -233,53 +233,28 @@ export const MapContainer: React.FC = () => {
           <span className="material-symbols-outlined text-on-surface-variant text-[20px]">filter_list</span>
         </div>
 
-        {/* Issue Card 1 */}
-        <div className="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
-          <div className="flex items-start justify-between mb-sm">
-            <div className="flex items-center gap-sm text-error">
-              <span className="material-symbols-outlined text-[20px] fill">warning</span>
-              <span className="font-label-caps text-label-caps uppercase">Critical</span>
+        {trendingIssues.length === 0 ? (
+          <p className="text-xs text-on-surface-variant p-4 text-center italic">No trending issues currently.</p>
+        ) : (
+          trendingIssues.map((issue) => (
+            <div key={issue.id} className="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
+              <div className="flex items-start justify-between mb-sm">
+                <div className={`flex items-center gap-sm ${issue.upvotes > 10 ? 'text-error' : 'text-primary'}`}>
+                  <span className="material-symbols-outlined text-[20px] fill">{issue.upvotes > 10 ? 'warning' : 'trending_up'}</span>
+                  <span className="font-label-caps text-label-caps uppercase">{issue.upvotes > 10 ? 'Critical' : 'Trending'}</span>
+                </div>
+                <span className="font-caption text-caption text-on-surface-variant">
+                  {Math.floor((Date.now() - new Date(issue.created_at).getTime()) / 3600000)}h ago
+                </span>
+              </div>
+              <h3 className="font-body-md text-body-md font-semibold text-on-surface mb-xs">{issue.title}</h3>
+              <p className="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-[14px]">location_on</span>
+                {issue.constituency_id}
+              </p>
             </div>
-            <span className="font-caption text-caption text-on-surface-variant">2h ago</span>
-          </div>
-          <h3 className="font-body-md text-body-md font-semibold text-on-surface mb-xs">Water Main Break</h3>
-          <p className="font-caption text-caption text-on-surface-variant flex items-center gap-1">
-            <span className="material-symbols-outlined text-[14px]">location_on</span>
-            Bandra West, Link Road
-          </p>
-        </div>
-
-        {/* Issue Card 2 */}
-        <div className="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
-          <div className="flex items-start justify-between mb-sm">
-            <div className="flex items-center gap-sm text-tertiary-container">
-              <span className="material-symbols-outlined text-[20px] fill">construction</span>
-              <span className="font-label-caps text-label-caps uppercase">Elevated</span>
-            </div>
-            <span className="font-caption text-caption text-on-surface-variant">5h ago</span>
-          </div>
-          <h3 className="font-body-md text-body-md font-semibold text-on-surface mb-xs">Road Subsidence</h3>
-          <p className="font-caption text-caption text-on-surface-variant flex items-center gap-1">
-            <span className="material-symbols-outlined text-[14px]">location_on</span>
-            Andheri East, MIDC
-          </p>
-        </div>
-
-        {/* Issue Card 3 */}
-        <div className="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
-          <div className="flex items-start justify-between mb-sm">
-            <div className="flex items-center gap-sm text-outline">
-              <span className="material-symbols-outlined text-[20px] fill">power_off</span>
-              <span className="font-label-caps text-label-caps uppercase">Monitoring</span>
-            </div>
-            <span className="font-caption text-caption text-on-surface-variant">1d ago</span>
-          </div>
-          <h3 className="font-body-md text-body-md font-semibold text-on-surface mb-xs">Grid Fluctuation</h3>
-          <p className="font-caption text-caption text-on-surface-variant flex items-center gap-1">
-            <span className="material-symbols-outlined text-[14px]">location_on</span>
-            South Mumbai, Fort Area
-          </p>
-        </div>
+          ))
+        )}
       </div>
 
       {/* ── Leaflet Map ───────────────────────────────────────────────────── */}

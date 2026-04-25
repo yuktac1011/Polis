@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 import cors from 'cors';
 import { z, ZodError } from 'zod';
 import crypto from 'crypto';
@@ -6,8 +8,22 @@ import db, { initDb, getAllMlas } from './db';
 import * as bcrypt from 'bcryptjs';
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PATCH"]
+  }
+});
+
 app.use(cors());
 app.use(express.json());
+
+// ─── Socket.io ───────────────────────────────────────────────────────────────
+io.on('connection', (socket) => {
+  console.log('📡 Client connected:', socket.id);
+  socket.on('disconnect', () => console.log('📡 Client disconnected'));
+});
 
 // ─── DB Init ─────────────────────────────────────────────────────────────────
 initDb();
@@ -176,6 +192,9 @@ app.post('/api/issues', (req: Request, res: Response) => {
         data.reporter_hash
       );
 
+    const newIssue = { id: info.lastInsertRowid, ...data, status: 'New', upvotes: 0, created_at: new Date().toISOString() };
+    io.emit('issue_created', newIssue);
+
     return res.status(201).json({ success: true, id: info.lastInsertRowid });
   } catch (err) {
     if (err instanceof ZodError) {
@@ -199,6 +218,10 @@ app.patch('/api/issues/:id', (req: Request, res: Response) => {
     if (result.changes === 0) {
       return res.status(404).json({ error: 'Issue not found' });
     }
+
+    const updatedIssue = db.prepare('SELECT i.*, (SELECT COUNT(*) FROM upvotes WHERE issue_id = i.id) as upvotes FROM issues i WHERE i.id = ?').get(req.params.id);
+    io.emit('issue_updated', updatedIssue);
+
     return res.json({ success: true });
   } catch (err) {
     console.error('[Update Issue]', err);
@@ -248,6 +271,10 @@ app.post('/api/issues/:id/upvote', (req: Request, res: Response) => {
     db.prepare(
       'INSERT OR IGNORE INTO upvotes (issue_id, citizen_hash) VALUES (?, ?)'
     ).run(req.params.id, citizen_hash);
+
+    const updatedIssue = db.prepare('SELECT i.*, (SELECT COUNT(*) FROM upvotes WHERE issue_id = i.id) as upvotes FROM issues i WHERE i.id = ?').get(req.params.id);
+    io.emit('issue_updated', updatedIssue);
+
     return res.json({ success: true });
   } catch (err) {
     console.error('[Upvote]', err);
@@ -272,6 +299,57 @@ app.post('/api/issues/group', (req: Request, res: Response) => {
     db.exec('ROLLBACK');
     console.error('[Group Issues]', err);
     return res.status(500).json({ error: 'Grouping failed' });
+  }
+});
+
+// ─── Trending Issues ─────────────────────────────────────────────────────────
+app.get('/api/issues/trending', (_req: Request, res: Response) => {
+  const issues = db.prepare(`
+    SELECT i.*, (SELECT COUNT(*) FROM upvotes WHERE issue_id = i.id) as upvotes
+    FROM issues i
+    ORDER BY upvotes DESC, i.created_at DESC
+    LIMIT 5
+  `).all();
+  return res.json(issues);
+});
+
+// ─── Project Routes ──────────────────────────────────────────────────────────
+app.get('/api/projects', (req: Request, res: Response) => {
+  const { mla_id } = req.query;
+  let projects;
+  if (mla_id) {
+    projects = db.prepare('SELECT * FROM projects WHERE mla_id = ? ORDER BY created_at DESC').all(mla_id);
+  } else {
+    projects = db.prepare('SELECT * FROM projects ORDER BY created_at DESC').all();
+  }
+  return res.json(projects);
+});
+
+app.post('/api/projects', (req: Request, res: Response) => {
+  const { mla_id, title, description, status, budget } = req.body;
+  if (!mla_id || !title) return res.status(400).json({ error: 'mla_id and title required' });
+  try {
+    const info = db.prepare(
+      'INSERT INTO projects (mla_id, title, description, status, budget) VALUES (?, ?, ?, ?, ?)'
+    ).run(mla_id, title, description || '', status || 'Planning', budget || null);
+    return res.status(201).json({ success: true, id: info.lastInsertRowid });
+  } catch (err) {
+    console.error('[Create Project]', err);
+    return res.status(500).json({ error: 'Failed to create project' });
+  }
+});
+
+app.patch('/api/projects/:id', (req: Request, res: Response) => {
+  const { status, title, description, budget } = req.body;
+  try {
+    const result = db.prepare(
+      'UPDATE projects SET status = COALESCE(?, status), title = COALESCE(?, title), description = COALESCE(?, description), budget = COALESCE(?, budget) WHERE id = ?'
+    ).run(status, title, description, budget, req.params.id);
+    if (result.changes === 0) return res.status(404).json({ error: 'Project not found' });
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('[Update Project]', err);
+    return res.status(500).json({ error: 'Update failed' });
   }
 });
 
@@ -300,8 +378,9 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`✅ Polis Backend running on http://localhost:${PORT}`);
+  console.log(`   WebSocket: enabled`);
   console.log(`   CORS: enabled`);
 });
 

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { io } from 'socket.io-client';
 import api from '../api';
 
 export type UserRole = 'ROLE_CITIZEN' | 'ROLE_MLA';
@@ -44,9 +45,21 @@ export interface MLA {
   zone: string;
 }
 
+export interface Project {
+  id: number;
+  mla_id: string;
+  title: string;
+  description: string;
+  status: 'Planning' | 'In Progress' | 'Completed';
+  budget?: string;
+  created_at: string;
+}
+
 interface StoreState {
   currentUser: User | null;
   issues: Issue[];
+  trendingIssues: Issue[];
+  projects: Project[];
   selectedConstituency: string | null;
   leaderboard: any[];
   geoData: any | null;
@@ -61,22 +74,29 @@ interface StoreState {
   logout: () => void;
   setAuthError: (err: string | null) => void;
   fetchIssues: () => Promise<void>;
+  fetchTrendingIssues: () => Promise<void>;
   createIssue: (data: Partial<Issue>) => Promise<boolean>;
   updateIssueStatus: (id: number, status: string, summary?: string) => Promise<boolean>;
   upvoteIssue: (id: number) => Promise<void>;
   fetchLeaderboard: () => Promise<void>;
   fetchGeoData: () => Promise<void>;
   fetchMlas: () => Promise<void>;
+  fetchProjects: (mla_id?: string) => Promise<void>;
+  createProject: (data: Partial<Project>) => Promise<boolean>;
+  updateProject: (id: number, data: Partial<Project>) => Promise<boolean>;
   reopenIssue: (id: number) => Promise<boolean>;
   groupIssues: (primaryId: number, otherIds: number[]) => Promise<boolean>;
   batchUpdateIssues: (ids: number[], status: string, summary?: string) => Promise<boolean>;
   setSelectedConstituency: (id: string | null) => void;
   toggleLiveMode: () => void;
+  initSocket: () => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
   currentUser: JSON.parse(sessionStorage.getItem('polis_session') || 'null'),
   issues: [],
+  trendingIssues: [],
+  projects: [],
   selectedConstituency: null,
   leaderboard: [],
   geoData: null,
@@ -131,6 +151,15 @@ export const useStore = create<StoreState>((set, get) => ({
       set({ issues: res.data });
     } catch (e) {
       console.error('[fetchIssues]', e);
+    }
+  },
+
+  fetchTrendingIssues: async () => {
+    try {
+      const res = await api.get('/issues/trending');
+      set({ trendingIssues: res.data });
+    } catch (e) {
+      console.error('[fetchTrendingIssues]', e);
     }
   },
 
@@ -199,6 +228,37 @@ export const useStore = create<StoreState>((set, get) => ({
       console.error('[fetchMlas]', e);
     }
   },
+
+  fetchProjects: async (mla_id) => {
+    try {
+      const res = await api.get('/projects', { params: { mla_id } });
+      set({ projects: res.data });
+    } catch (e) {
+      console.error('[fetchProjects]', e);
+    }
+  },
+
+  createProject: async (data) => {
+    try {
+      await api.post('/projects', data);
+      await get().fetchProjects(data.mla_id);
+      return true;
+    } catch (e) {
+      console.error('[createProject]', e);
+      return false;
+    }
+  },
+
+  updateProject: async (id, data) => {
+    try {
+      await api.patch(`/projects/${id}`, data);
+      await get().fetchProjects();
+      return true;
+    } catch (e) {
+      console.error('[updateProject]', e);
+      return false;
+    }
+  },
   
   reopenIssue: async (id) => {
     try {
@@ -235,4 +295,24 @@ export const useStore = create<StoreState>((set, get) => ({
 
   setSelectedConstituency: (id) => set({ selectedConstituency: id }),
   toggleLiveMode: () => set((state) => ({ isLiveMode: !state.isLiveMode })),
+
+  initSocket: () => {
+    const socket = io('http://localhost:3001');
+
+    socket.on('issue_created', (newIssue: Issue) => {
+      set((state) => ({ 
+        issues: [newIssue, ...state.issues] 
+      }));
+      // Also refresh trending if needed, or just let it be
+    });
+
+    socket.on('issue_updated', (updatedIssue: Issue) => {
+      set((state) => ({
+        issues: state.issues.map((i) => i.id === updatedIssue.id ? { ...i, ...updatedIssue } : i),
+        trendingIssues: state.trendingIssues.map((i) => i.id === updatedIssue.id ? { ...i, ...updatedIssue } : i)
+      }));
+    });
+
+    return () => socket.disconnect();
+  },
 }));

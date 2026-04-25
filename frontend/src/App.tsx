@@ -15,17 +15,27 @@ import { MyIssues } from './components/MyIssues/MyIssues';
 export type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE' | 'MY_ISSUES';
 
 function App() {
-  const { currentUser, fetchIssues, isLiveMode, toggleLiveMode } = useStore();
+  const { currentUser, fetchIssues, fetchTrendingIssues, isLiveMode, toggleLiveMode, initSocket } = useStore();
   const [view, setView] = useState<View>('MAP');
   const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
       fetchIssues();
-      const interval = setInterval(fetchIssues, 30000);
-      return () => clearInterval(interval);
+      fetchTrendingIssues();
+      const cleanup = initSocket();
+      
+      const interval = setInterval(() => {
+        fetchIssues();
+        fetchTrendingIssues();
+      }, 30000);
+      
+      return () => {
+        clearInterval(interval);
+        if (cleanup) cleanup();
+      };
     }
-  }, [currentUser, fetchIssues]);
+  }, [currentUser, fetchIssues, fetchTrendingIssues, initSocket]);
 
   if (!currentUser && !showAuth) {
     return <LandingPage onEnter={() => setShowAuth(true)} />;

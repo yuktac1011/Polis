@@ -84,11 +84,6 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
         })}
       </nav>
 
-      {/* CTA */}
-      <button className="mt-auto flex items-center justify-center gap-sm w-full py-3 px-4 bg-surface-container text-on-surface font-caption text-caption rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
-        <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
-        Submit Feedback
-      </button>
     </aside>
   );
 }
