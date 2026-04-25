@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore } from './store/useStore';
 import { AuthModal } from './components/Auth/AuthModal';
 import { MapContainer } from './components/Map/MapContainer';

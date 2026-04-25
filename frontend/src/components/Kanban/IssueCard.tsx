@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Issue } from '../../store/useStore';
 import { motion } from 'framer-motion';
 
@@ -10,25 +9,16 @@ interface IssueCardProps {
   currentUserHash?: string;
 }
 
-const timeAgo = (dateStr: string): string => {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-};
+
 
 // Generate a pseudo-ID like INF-204 based on issue.id and category
 const getTicketId = (issue: Issue) => {
   const prefix = issue.category.substring(0, 3).toUpperCase();
-  // Using the last 3 chars of the hash as numbers for display
-  const num = parseInt(issue.id.substring(issue.id.length - 4), 16) % 1000;
+  const num = issue.id % 1000;
   return `${prefix}-${num.toString().padStart(3, '0')}`;
 };
 
-export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote, currentUserHash }) => {
+export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote }) => {
   const isResolved = issue.status === 'Resolved';
 
   return (

@@ -153,7 +153,6 @@ export const Leaderboard: React.FC = () => {
               ) : (
                 filtered.map((mla, index) => {
                   const rate = mla.total_issues > 0 ? (mla.resolved_issues / mla.total_issues) * 100 : 0;
-                  const isTop = index < 3;
                   
                   // Mock trend logic
                   let trendIcon = "trending_flat";

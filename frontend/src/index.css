@@ -1,12 +1,125 @@
-@import "leaflet/dist/leaflet.css";
-
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "leaflet/dist/leaflet.css";
+@import "tailwindcss";
+
+@theme {
+  --color-surface-bright: #fcf8fa;
+  --color-outline-variant: #c6c6cd;
+  --color-secondary: #5c5f61;
+  --color-background: #fcf8fa;
+  --color-secondary-fixed: #e0e3e5;
+  --color-surface-container: #f0edef;
+  --color-inverse-primary: #bec6e0;
+  --color-on-secondary-fixed: #191c1e;
+  --color-inverse-surface: #303032;
+  --color-on-primary-fixed-variant: #3f465c;
+  --color-tertiary-fixed: #6ffbbe;
+  --color-on-primary-container: #7c839b;
+  --color-on-secondary-container: #626567;
+  --color-outline: #76777d;
+  --color-on-primary: #ffffff;
+  --color-surface-variant: #e4e2e4;
+  --color-tertiary-fixed-dim: #4edea3;
+  --color-on-background: #1b1b1d;
+  --color-on-tertiary-fixed-variant: #005236;
+  --color-primary-fixed-dim: #bec6e0;
+  --color-tertiary-container: #002113;
+  --color-primary-container: #131b2e;
+  --color-on-error: #ffffff;
+  --color-surface: #fcf8fa;
+  --color-surface-container-high: #eae7e9;
+  --color-on-secondary-fixed-variant: #444749;
+  --color-on-tertiary-container: #009668;
+  --color-tertiary: #000000;
+  --color-surface-container-low: #f6f3f5;
+  --color-error: #ba1a1a;
+  --color-primary: #000000;
+  --color-surface-dim: #dcd9db;
+  --color-error-container: #ffdad6;
+  --color-secondary-container: #e0e3e5;
+  --color-on-tertiary-fixed: #002113;
+  --color-on-secondary: #ffffff;
+  --color-on-surface-variant: #45464d;
+  --color-on-tertiary: #ffffff;
+  --color-surface-tint: #565e74;
+  --color-inverse-on-surface: #f3f0f2;
+  --color-primary-fixed: #dae2fd;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #1b1b1d;
+  --color-on-primary-fixed: #131b2e;
+  --color-surface-container-highest: #e4e2e4;
+  --color-on-error-container: #93000a;
+  --color-secondary-fixed-dim: #c4c7c9;
+  --color-apple-bg: #FBFBFB;
+  --color-apple-surface: #FFFFFF;
+  --color-apple-text: #1D1D1F;
+  --color-apple-secondary: #6E6E73;
+  --color-apple-border: #E5E5E5;
+  --color-apple-new: #323232;
+  --color-apple-progress: #D97706;
+  --color-apple-resolved: #059669;
+
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  --spacing-sm: 8px;
+  --spacing-xs: 4px;
+  --spacing-xl: 40px;
+  --spacing-lg: 24px;
+  --spacing-gutter: 24px;
+  --spacing-unit: 4px;
+  --spacing-container-max: 1200px;
+  --spacing-md: 16px;
+  --spacing-xxl: 64px;
+
+  --font-h2: "Public Sans", sans-serif;
+  --font-caption: "Public Sans", sans-serif;
+  --font-h1: "Public Sans", sans-serif;
+  --font-display: "Public Sans", sans-serif;
+  --font-label-caps: "Public Sans", sans-serif;
+  --font-body-lg: "Public Sans", sans-serif;
+  --font-body-md: "Public Sans", sans-serif;
+  --font-sans: "Public Sans", sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-h2: 24px;
+  --text-h2--line-height: 1.3;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 600;
+
+  --text-caption: 14px;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0em;
+  --text-caption--font-weight: 500;
+
+  --text-h1: 32px;
+  --text-h1--line-height: 1.2;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h1--font-weight: 600;
+
+  --text-display: 48px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1.2;
+  --text-label-caps--letter-spacing: 0.05em;
+  --text-label-caps--font-weight: 600;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--letter-spacing: -0.005em;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+  --text-body-md--letter-spacing: 0em;
+  --text-body-md--font-weight: 400;
+}
 
 @layer base {
   body {

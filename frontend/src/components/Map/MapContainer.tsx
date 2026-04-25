@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MapContainer as LeafletMap, TileLayer, GeoJSON, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useStore } from '../../store/useStore';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // Inject keyframe for divIcon animations if not using tailwind's animate-ping/pulse inside the icon
 const styleEl = document.createElement('style');
@@ -69,7 +68,7 @@ export const MapContainer: React.FC = () => {
   const [category, setCategory] = useState('Infrastructure');
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [resetTrigger, setResetTrigger] = useState(0);
+
 
   useEffect(() => { fetchGeoData(); fetchMlas(); }, [fetchGeoData, fetchMlas]);
 
@@ -251,7 +250,7 @@ export const MapContainer: React.FC = () => {
         zoomControl={false}
         style={{ background: '#e0e3e5' }}
       >
-        <MapControls trigger={resetTrigger} />
+        <MapControls trigger={0} />
 
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
