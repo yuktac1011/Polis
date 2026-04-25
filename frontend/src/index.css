@@ -1,0 +1,76 @@
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-apple-bg text-apple-text font-sans antialiased selection:bg-apple-text selection:text-apple-surface;
+  }
+
+  h1, .display {
+    @apply text-[32pt] font-semibold tracking-[-0.022em];
+  }
+
+  h2, .heading {
+    @apply text-[18pt] font-medium;
+  }
+
+  p, .body {
+    @apply text-[14pt] font-normal;
+  }
+
+  .mono {
+    @apply font-mono text-[12pt] font-medium;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg;
+  }
+
+  .pin-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: .7;
+      transform: scale(1.2);
+    }
+  }
+
+  .identity-card {
+    perspective: 1000px;
+  }
+
+  .identity-card-inner {
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+  }
+
+  .identity-card.is-flipped .identity-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

@@ -1,0 +1,119 @@
+[
+  {
+    "ward": "A Ward",
+    "mla_name": "Rahul Narwekar",
+    "constituency": "Colaba (187)",
+    "party": "BJP",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "B Ward",
+    "mla_name": "Amin Patel",
+    "constituency": "Mumbadevi (186)",
+    "party": "INC",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "B Ward",
+    "mla_name": "Manoj Jamsutkar",
+    "constituency": "Byculla (184)",
+    "party": "SS-UBT",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "C Ward",
+    "mla_name": "Amin Patel",
+    "constituency": "Mumbadevi (186)",
+    "party": "INC",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "C Ward",
+    "mla_name": "Mangal Prabhat Lodha",
+    "constituency": "Malabar Hill (185)",
+    "party": "BJP",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "D Ward",
+    "mla_name": "Mangal Prabhat Lodha",
+    "constituency": "Malabar Hill (185)",
+    "party": "BJP",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "E Ward",
+    "mla_name": "Manoj Jamsutkar",
+    "constituency": "Byculla (184)",
+    "party": "SS-UBT",
+    "location_details": {
+      "zone": "Zone 1",
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "F/N Ward",
+    "mla_name": "Kalidas Kolambkar",
+    "constituency": "Wadala (180)",
+    "party": "BJP",
+    "location_details": {
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "G/S Ward",
+    "mla_name": "Aaditya Thackeray",
+    "constituency": "Worli (182)",
+    "party": "SS-UBT",
+    "location_details": {
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "K/W Ward",
+    "mla_name": "Ameet Satam",
+    "constituency": "Andheri West (165)",
+    "party": "BJP",
+    "location_details": {
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  },
+  {
+    "ward": "M/E Ward",
+    "mla_name": "Abu Azmi",
+    "constituency": "Mankhurd (171)",
+    "party": "SP",
+    "location_details": {
+      "city": "MUMBAI",
+      "part": "Mumbai Suburban"
+    }
+  }
+]
