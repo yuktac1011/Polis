@@ -1,118 +1,226 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { motion } from 'framer-motion';
 
 export const Leaderboard: React.FC = () => {
   const { leaderboard, fetchLeaderboard } = useStore();
+  const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetchLeaderboard();
-  }, [fetchLeaderboard]);
+  useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
-  const sortedBoard = [...leaderboard].sort((a, b) => {
-    const rateA = a.total_issues ? (a.resolved_issues / a.total_issues) : 0;
-    const rateB = b.total_issues ? (b.resolved_issues / b.total_issues) : 0;
-    return rateB - rateA;
+  const sorted = [...leaderboard].sort((a, b) => {
+    const rateA = a.total_issues > 0 ? a.resolved_issues / a.total_issues : 0;
+    const rateB = b.total_issues > 0 ? b.resolved_issues / b.total_issues : 0;
+    return rateB - rateA || b.resolved_issues - a.resolved_issues;
   });
 
-  const radius = 24;
-  const circumference = 2 * Math.PI * radius;
+  const filtered = sorted.filter(mla => 
+    mla.constituency.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    mla.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalResolved = sorted.reduce((s, m) => s + (m.resolved_issues || 0), 0);
+  const totalIssues = sorted.reduce((s, m) => s + (m.total_issues || 0), 0);
+  const overallResolution = totalIssues > 0 ? (totalResolved / totalIssues) * 100 : 0;
+  
+  // Calculate a mock "critical backlog" as the number of new issues
+  const criticalBacklog = sorted.reduce((s, m) => s + ((m.total_issues || 0) - (m.resolved_issues || 0) - (m.in_progress_issues || 0)), 0);
 
   return (
-    <div className="h-full bg-apple-surface border-l border-apple-border p-8 flex flex-col overflow-hidden">
-      <div className="mb-10">
-        <h2 className="text-[28pt] font-semibold tracking-tight text-apple-text leading-tight">Civic Efficiency</h2>
-        <p className="text-[11pt] text-apple-secondary mt-1">Ranking MLAs by resolution velocity.</p>
-      </div>
-      
-      <div className="flex flex-col gap-4 overflow-y-auto pr-2 pb-10 scrollbar-hide">
-        {sortedBoard.map((mla, index) => {
-          const rate = mla.total_issues ? (mla.resolved_issues / mla.total_issues) * 100 : 0;
-          const offset = circumference - (rate / 100) * circumference;
-          const isTop = index === 0;
-
-          return (
-            <motion.div 
-              key={mla.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
-              className={`group relative p-6 rounded-[28px] border transition-all duration-500 ${
-                isTop 
-                ? 'border-[#FFD700]/30 bg-gradient-to-br from-[#FFD700]/5 to-transparent shadow-[0_10px_30px_-10px_rgba(255,215,0,0.1)]' 
-                : 'border-apple-border bg-apple-bg/50 hover:bg-apple-bg hover:border-apple-text/10'
-              }`}
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold ${
-                    isTop ? 'bg-[#FFD700] text-black' : 'bg-apple-border text-apple-secondary'
-                  }`}>
-                    {index + 1}
-                  </div>
-                  <div>
-                    <h4 className="text-[14pt] font-semibold text-apple-text group-hover:text-apple-new transition-colors">{mla.name}</h4>
-                    <p className="text-[10pt] text-apple-secondary font-medium uppercase tracking-widest">{mla.constituency}</p>
-                  </div>
-                </div>
-
-                <div className="relative flex items-center justify-center w-16 h-16">
-                  <svg className="w-16 h-16 transform -rotate-90">
-                    <circle 
-                      cx="32" cy="32" r={radius} 
-                      stroke="currentColor" 
-                      strokeWidth="4" 
-                      fill="transparent" 
-                      className="text-apple-border/30" 
-                    />
-                    <motion.circle 
-                      cx="32" cy="32" r={radius} 
-                      stroke="currentColor" 
-                      strokeWidth="4" 
-                      fill="transparent" 
-                      strokeDasharray={circumference}
-                      initial={{ strokeDashoffset: circumference }}
-                      animate={{ strokeDashoffset: offset }}
-                      transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                      className={rate > 70 ? 'text-apple-resolved' : rate > 40 ? 'text-apple-progress' : 'text-apple-new'}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <div className="absolute flex flex-col items-center justify-center">
-                    <span className="text-[10pt] font-bold tabular-nums text-apple-text">
-                      {Math.round(rate)}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 flex gap-4">
-                <div className="flex-1 px-3 py-2 bg-apple-surface/50 rounded-xl border border-apple-border/50">
-                  <span className="block text-[8pt] font-bold text-apple-secondary uppercase tracking-tighter">Total Issues</span>
-                  <span className="text-sm font-semibold text-apple-text tabular-nums">{mla.total_issues}</span>
-                </div>
-                <div className="flex-1 px-3 py-2 bg-apple-surface/50 rounded-xl border border-apple-border/50">
-                  <span className="block text-[8pt] font-bold text-apple-secondary uppercase tracking-tighter">Resolved</span>
-                  <span className="text-sm font-semibold text-apple-resolved tabular-nums">{mla.resolved_issues}</span>
-                </div>
-              </div>
-
-              {isTop && (
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#FFD700] rounded-full flex items-center justify-center shadow-lg border-2 border-white animate-bounce">
-                  <span className="text-[10px]">👑</span>
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
+    <div className="flex-1 p-xl max-w-container-max mx-auto w-full flex flex-col gap-xxl pb-xxl">
+      {/* Page Header */}
+      <div className="flex flex-col gap-sm">
+        <h1 className="font-h1 text-[32px] text-on-background">Accountability Leaderboard</h1>
+        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          Tracking resolution metrics and operational efficiency across all civic constituencies in real-time.
+        </p>
       </div>
 
-      <div className="mt-auto p-6 bg-apple-text text-apple-surface rounded-[24px] shadow-2xl relative overflow-hidden group">
-        <div className="relative z-10">
-          <h3 className="text-lg font-semibold tracking-tight mb-1">Weekly Pulse</h3>
-          <p className="text-sm opacity-60">Civic resolution efficiency is up 12% across all wards this week.</p>
+      {/* Hero Metrics Bento Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-lg">
+        {/* Metric Card 1 */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Overall Resolution</span>
+            <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+              <span className="material-symbols-outlined text-on-surface text-sm">check_circle</span>
+            </div>
+          </div>
+          <div className="flex items-end gap-sm">
+            <span className="font-display text-[48px] font-bold text-on-background">{overallResolution.toFixed(1)}%</span>
+            <span className="font-caption text-caption text-tertiary-fixed-dim pb-2 flex items-center">
+              <span className="material-symbols-outlined text-sm">arrow_upward</span> 2.1%
+            </span>
+          </div>
+          {/* Decorative Sparkline */}
+          <div className="w-full h-1 bg-surface-container-high rounded-full mt-auto overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${overallResolution}%` }}></div>
+          </div>
         </div>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl -mr-10 -mt-10 rounded-full group-hover:scale-150 transition-transform duration-1000" />
+
+        {/* Metric Card 2 */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Avg Response Time</span>
+            <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+              <span className="material-symbols-outlined text-on-surface text-sm">timer</span>
+            </div>
+          </div>
+          <div className="flex items-end gap-sm">
+            <span className="font-display text-[48px] font-bold text-on-background">14h</span>
+            <span className="font-caption text-caption text-tertiary-fixed-dim pb-2 flex items-center">
+              <span className="material-symbols-outlined text-sm">arrow_downward</span> 3h
+            </span>
+          </div>
+          {/* Decorative Sparkline Area */}
+          <div className="w-full h-8 mt-auto flex items-end gap-1 opacity-60">
+            <div className="w-1/6 h-full bg-outline-variant rounded-t-sm"></div>
+            <div className="w-1/6 h-4/5 bg-outline-variant rounded-t-sm"></div>
+            <div className="w-1/6 h-3/5 bg-outline-variant rounded-t-sm"></div>
+            <div className="w-1/6 h-2/5 bg-outline-variant rounded-t-sm"></div>
+            <div className="w-1/6 h-1/5 bg-primary rounded-t-sm"></div>
+            <div className="w-1/6 h-1/6 bg-primary rounded-t-sm"></div>
+          </div>
+        </div>
+
+        {/* Metric Card 3 */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+          <div className="flex items-center justify-between">
+            <span className="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Critical Backlog</span>
+            <div className="w-8 h-8 rounded-full bg-error-container flex items-center justify-center">
+              <span className="material-symbols-outlined text-on-error-container text-sm">warning</span>
+            </div>
+          </div>
+          <div className="flex items-end gap-sm">
+            <span className="font-display text-[48px] font-bold text-on-background">{criticalBacklog}</span>
+            <span className="font-caption text-caption text-error pb-2 flex items-center">
+              <span className="material-symbols-outlined text-sm">arrow_upward</span> 12
+            </span>
+          </div>
+          {/* Decorative Sparkline Area */}
+          <div className="w-full h-8 mt-auto flex flex-col justify-center">
+            <div className="w-full border-b-2 border-dashed border-error opacity-50 relative">
+              <div className="absolute right-0 -top-1 w-2 h-2 rounded-full bg-error animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="flex flex-col gap-lg">
+        {/* Controls */}
+        <div className="flex items-center justify-between bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-[0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+          <div className="relative w-72">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+            <input 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 h-12 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-on-surface-variant" 
+              placeholder="Search constituencies..." 
+            />
+          </div>
+          <div className="flex items-center gap-sm">
+            <button className="flex items-center gap-xs h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-lg font-caption text-caption text-on-surface hover:bg-surface-container-low transition-colors">
+              <span className="material-symbols-outlined text-sm">filter_list</span>
+              Filter
+            </button>
+            <button className="flex items-center gap-xs h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-lg font-caption text-caption text-on-surface hover:bg-surface-container-low transition-colors">
+              <span className="material-symbols-outlined text-sm">sort</span>
+              Sort: Rank
+            </button>
+          </div>
+        </div>
+
+        {/* The Data Table */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-surface-container-low border-b border-surface-variant">
+                <th className="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase w-24">Rank</th>
+                <th className="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase">Constituency</th>
+                <th className="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase">Representative</th>
+                <th className="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase w-1/3">Resolution Index</th>
+                <th className="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Trend</th>
+              </tr>
+            </thead>
+            <tbody className="font-body-md text-body-md text-on-surface">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-xl text-center text-on-surface-variant">
+                    No matching constituencies found.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((mla, index) => {
+                  const rate = mla.total_issues > 0 ? (mla.resolved_issues / mla.total_issues) * 100 : 0;
+                  const isTop = index < 3;
+                  
+                  // Mock trend logic
+                  let trendIcon = "trending_flat";
+                  let trendColor = "text-on-surface-variant bg-surface-container";
+                  if (rate > 80) {
+                    trendIcon = "trending_up";
+                    trendColor = "text-tertiary-fixed-dim bg-surface-container";
+                  } else if (rate < 40) {
+                    trendIcon = "trending_down";
+                    trendColor = "text-error bg-error-container";
+                  }
+
+                  return (
+                    <motion.tr 
+                      key={mla.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="border-b border-surface-container-high hover:bg-surface-bright transition-colors h-[72px]"
+                    >
+                      <td className="px-lg py-md">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-caption text-caption font-bold ${
+                          index === 0 ? 'bg-[#F5C842] text-black' : 
+                          index === 1 ? 'bg-[#C0C0C0] text-black' : 
+                          index === 2 ? 'bg-[#CD7F32] text-white' : 
+                          'bg-surface-container text-on-surface'
+                        }`}>
+                          {index + 1}
+                        </div>
+                      </td>
+                      <td className="px-lg py-md font-h2 text-[18px] text-on-background">
+                        {mla.constituency}
+                        <span className="ml-2 text-xs font-body-md text-on-surface-variant">({mla.ward})</span>
+                      </td>
+                      <td className="px-lg py-md text-on-surface-variant flex items-center gap-sm">
+                        <div className="w-6 h-6 rounded-full bg-surface-container overflow-hidden flex items-center justify-center">
+                          <span className="material-symbols-outlined text-on-surface-variant text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
+                        </div>
+                        {mla.name}
+                      </td>
+                      <td className="px-lg py-md">
+                        <div className="flex items-center gap-md">
+                          <div className="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-1000 ${
+                                rate >= 70 ? 'bg-primary' : rate >= 40 ? 'bg-secondary' : 'bg-error'
+                              }`} 
+                              style={{ width: `${rate}%` }}
+                            ></div>
+                          </div>
+                          <span className="font-caption text-caption text-on-surface font-semibold w-12 text-right">
+                            {Math.round(rate)}%
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-lg py-md text-right">
+                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full ${trendColor}`}>
+                          <span className="material-symbols-outlined text-sm">{trendIcon}</span>
+                        </span>
+                      </td>
+                    </motion.tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

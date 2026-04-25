@@ -1,154 +1,253 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 import crypto from 'crypto';
-import db, { initDb } from './db';
-import { validateAadhar } from './auth';
+import db, { initDb, getAllMlas } from './db';
+import bcrypt from 'bcryptjs';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ─── DB Init ─────────────────────────────────────────────────────────────────
 initDb();
 
-const generateCitizenHash = (aadhar: string, username: string) => {
-  return crypto.createHash('sha256').update(aadhar + username).digest('hex').substring(0, 8);
-};
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+const generateCitizenHash = (email: string, username: string) =>
+  crypto.createHash('sha256').update(email + username).digest('hex').substring(0, 8).toUpperCase();
 
-const AuthSchema = z.object({
-  aadhar: z.string().length(12),
-  username: z.string().min(3)
+// ─── Validation Schemas ───────────────────────────────────────────────────────
+const RegisterSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
+  mlaCode: z.string().optional(),
+  mlaWardId: z.string().optional(),
 });
 
-app.post('/api/auth', (req, res) => {
-  try {
-    const { aadhar, username } = AuthSchema.parse(req.body);
-    
-    if (!validateAadhar(aadhar)) {
-      return res.status(400).json({ error: 'Invalid Aadhar' });
-    }
-
-    const citizen_hash = generateCitizenHash(aadhar, username);
-    let role = 'ROLE_CITIZEN';
-    let mla_id = null;
-
-    if (aadhar.endsWith('00')) {
-      role = 'ROLE_MLA';
-      const mlas = db.prepare('SELECT id FROM mlas').all() as { id: string }[];
-      const suffix = parseInt(aadhar.slice(9, 12));
-      const mlaIndex = (suffix / 100) - 1;
-      if (mlaIndex >= 0 && mlaIndex < mlas.length) {
-        mla_id = mlas[mlaIndex].id;
-      } else {
-        mla_id = mlas[0].id;
-      }
-    }
-
-    const userExists = db.prepare('SELECT * FROM users WHERE aadhar = ?').get(aadhar);
-    if (!userExists) {
-      db.prepare('INSERT INTO users (aadhar, username, role, citizen_hash, mla_id) VALUES (?, ?, ?, ?, ?)').run(aadhar, username, role, citizen_hash, mla_id);
-    } else {
-      const user = userExists as any;
-      role = user.role;
-      mla_id = user.mla_id;
-    }
-
-    const mlaInfo = mla_id ? db.prepare('SELECT * FROM mlas WHERE id = ?').get(mla_id) : null;
-
-    res.json({
-      success: true,
-      user: {
-        aadhar,
-        username,
-        role,
-        citizenHash: citizen_hash,
-        mla_id,
-        mla_info: mlaInfo
-      }
-    });
-  } catch (err) {
-    res.status(400).json({ error: 'Invalid input' });
-  }
-});
-
-app.get('/api/issues', (req, res) => {
-  const issues = db.prepare(`
-    SELECT i.*, 
-           (SELECT COUNT(*) FROM upvotes WHERE issue_id = i.id) as upvotes
-    FROM issues i
-  `).all();
-  res.json(issues);
+const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
 });
 
 const IssueSchema = z.object({
-  category: z.string(),
-  title: z.string(),
-  description: z.string(),
+  category: z.string().min(1),
+  title: z.string().min(3),
+  description: z.string().min(10),
   x_coord: z.number(),
   y_coord: z.number(),
-  constituency_id: z.string(),
-  reporter_hash: z.string()
+  constituency_id: z.string().min(1),
+  reporter_hash: z.string().min(1),
 });
 
-app.post('/api/issues', (req, res) => {
+// ─── Auth Routes ──────────────────────────────────────────────────────────────
+app.post('/api/auth/register', async (req: Request, res: Response) => {
+  try {
+    const { email, password, username, mlaCode, mlaWardId } = RegisterSchema.parse(req.body);
+
+    const userExists = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    if (userExists) {
+      return res.status(409).json({ error: 'Email already registered' });
+    }
+
+    const citizen_hash = generateCitizenHash(email, username);
+    let role = 'ROLE_CITIZEN';
+    let mla_id: string | null = null;
+
+    if (mlaCode === 'POLIS_MLA_2024') {
+      role = 'ROLE_MLA';
+      if (mlaWardId) {
+        // Use the specific ward the MLA selects
+        const mlaRecord = db.prepare('SELECT id FROM mlas WHERE id = ?').get(mlaWardId) as any;
+        if (mlaRecord) {
+          mla_id = mlaRecord.id;
+        }
+      }
+      if (!mla_id) {
+        // Fallback: assign first available ward
+        const mlas = db.prepare('SELECT id FROM mlas').all() as { id: string }[];
+        mla_id = mlas.length > 0 ? mlas[0].id : null;
+      }
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const id = crypto.randomUUID();
+
+    db.prepare(
+      'INSERT INTO users (id, email, password_hash, username, role, citizen_hash, mla_id) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).run(id, email, password_hash, username, role, citizen_hash, mla_id);
+
+    const mlaInfo = mla_id ? db.prepare('SELECT * FROM mlas WHERE id = ?').get(mla_id) : null;
+
+    return res.status(201).json({
+      success: true,
+      user: { id, email, username, role, citizenHash: citizen_hash, mla_id, mla_info: mlaInfo },
+    });
+  } catch (err) {
+    if (err instanceof ZodError) {
+      return res.status(400).json({ error: err.errors[0].message });
+    }
+    console.error('[Register]', err);
+    return res.status(500).json({ error: 'Registration failed' });
+  }
+});
+
+app.post('/api/auth/login', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = LoginSchema.parse(req.body);
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as any;
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const mlaInfo = user.mla_id
+      ? db.prepare('SELECT * FROM mlas WHERE id = ?').get(user.mla_id)
+      : null;
+
+    return res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+        citizenHash: user.citizen_hash,
+        mla_id: user.mla_id,
+        mla_info: mlaInfo,
+      },
+    });
+  } catch (err) {
+    if (err instanceof ZodError) {
+      return res.status(400).json({ error: err.errors[0].message });
+    }
+    console.error('[Login]', err);
+    return res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// ─── MLA Routes ───────────────────────────────────────────────────────────────
+app.get('/api/mlas', (_req: Request, res: Response) => {
+  const mlas = getAllMlas();
+  return res.json(mlas);
+});
+
+// ─── Issues Routes ────────────────────────────────────────────────────────────
+app.get('/api/issues', (_req: Request, res: Response) => {
+  const issues = db
+    .prepare(
+      `SELECT i.*, (SELECT COUNT(*) FROM upvotes WHERE issue_id = i.id) as upvotes
+       FROM issues i
+       ORDER BY i.created_at DESC`
+    )
+    .all();
+  return res.json(issues);
+});
+
+app.post('/api/issues', (req: Request, res: Response) => {
   try {
     const data = IssueSchema.parse(req.body);
-    const stmt = db.prepare(`
-      INSERT INTO issues (category, title, description, status, x_coord, y_coord, constituency_id, reporter_hash)
-      VALUES (?, ?, ?, 'New', ?, ?, ?, ?)
-    `);
-    const info = stmt.run(data.category, data.title, data.description, data.x_coord, data.y_coord, data.constituency_id, data.reporter_hash);
-    res.json({ success: true, id: info.lastInsertRowid });
+
+    // Validate that the constituency_id exists — give a useful error if not
+    const wardExists = db.prepare('SELECT id FROM mlas WHERE id = ?').get(data.constituency_id);
+    if (!wardExists) {
+      // Don't fail — just store the issue without the FK constraint for resilience
+      // Instead, insert without FK enforcement for unknown wards
+      console.warn(`[Issues] Unknown ward: ${data.constituency_id} — inserting without MLA linkage`);
+    }
+
+    const info = db
+      .prepare(
+        `INSERT INTO issues (category, title, description, status, x_coord, y_coord, constituency_id, reporter_hash)
+         VALUES (?, ?, ?, 'New', ?, ?, ?, ?)`
+      )
+      .run(
+        data.category,
+        data.title,
+        data.description,
+        data.x_coord,
+        data.y_coord,
+        data.constituency_id,
+        data.reporter_hash
+      );
+
+    return res.status(201).json({ success: true, id: info.lastInsertRowid });
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: 'Invalid input' });
+    if (err instanceof ZodError) {
+      return res.status(400).json({ error: err.errors[0].message });
+    }
+    console.error('[Create Issue]', err);
+    return res.status(500).json({ error: 'Failed to create issue' });
   }
 });
 
-app.patch('/api/issues/:id', (req, res) => {
+app.patch('/api/issues/:id', (req: Request, res: Response) => {
   const { status, resolution_summary } = req.body;
-  if (!['New', 'In Progress', 'Resolved'].includes(status)) {
-    return res.status(400).json({ error: 'Invalid status' });
+  const validStatuses = ['New', 'In Progress', 'Resolved'];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ error: `Status must be one of: ${validStatuses.join(', ')}` });
   }
   try {
-    db.prepare('UPDATE issues SET status = ?, resolution_summary = ? WHERE id = ?').run(status, resolution_summary || null, req.params.id);
-    res.json({ success: true });
+    const result = db
+      .prepare('UPDATE issues SET status = ?, resolution_summary = ? WHERE id = ?')
+      .run(status, resolution_summary || null, req.params.id);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Issue not found' });
+    }
+    return res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('[Update Issue]', err);
+    return res.status(500).json({ error: 'Update failed' });
   }
 });
 
-app.post('/api/issues/:id/upvote', (req, res) => {
+app.post('/api/issues/:id/upvote', (req: Request, res: Response) => {
   const { citizen_hash } = req.body;
-  if (!citizen_hash) return res.status(400).json({ error: 'Missing citizen hash' });
-  
+  if (!citizen_hash) return res.status(400).json({ error: 'citizen_hash is required' });
   try {
-    db.prepare('INSERT OR IGNORE INTO upvotes (issue_id, citizen_hash) VALUES (?, ?)').run(req.params.id, citizen_hash);
-    res.json({ success: true });
+    db.prepare(
+      'INSERT OR IGNORE INTO upvotes (issue_id, citizen_hash) VALUES (?, ?)'
+    ).run(req.params.id, citizen_hash);
+    return res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('[Upvote]', err);
+    return res.status(500).json({ error: 'Upvote failed' });
   }
 });
 
-app.get('/api/leaderboard', (req, res) => {
-  const stats = db.prepare(`
-    SELECT m.id, m.name, m.constituency,
-           COUNT(i.id) as total_issues,
-           SUM(CASE WHEN i.status = 'Resolved' THEN 1 ELSE 0 END) as resolved_issues
-    FROM mlas m
-    LEFT JOIN issues i ON m.id = i.constituency_id
-    GROUP BY m.id
-  `).all();
-  
-  res.json(stats);
+// ─── Leaderboard Route ────────────────────────────────────────────────────────
+app.get('/api/leaderboard', (_req: Request, res: Response) => {
+  const stats = db
+    .prepare(
+      `SELECT m.id, m.name, m.constituency, m.party, m.ward, m.zone,
+              COUNT(i.id) as total_issues,
+              SUM(CASE WHEN i.status = 'Resolved' THEN 1 ELSE 0 END) as resolved_issues,
+              SUM(CASE WHEN i.status = 'In Progress' THEN 1 ELSE 0 END) as in_progress_issues,
+              SUM(CASE WHEN i.status = 'New' THEN 1 ELSE 0 END) as new_issues
+       FROM mlas m
+       LEFT JOIN issues i ON m.id = i.constituency_id
+       GROUP BY m.id
+       ORDER BY resolved_issues DESC, total_issues DESC`
+    )
+    .all();
+  return res.json(stats);
 });
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal Server Error' });
+// ─── Global Error Handler ─────────────────────────────────────────────────────
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('[Unhandled Error]', err);
+  return res.status(500).json({ error: 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
+  console.log(`✅ Polis Backend running on http://localhost:${PORT}`);
+  console.log(`   CORS: enabled`);
 });
+
+export default app;

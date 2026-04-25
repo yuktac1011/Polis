@@ -4,12 +4,20 @@ import api from '../api';
 export type UserRole = 'ROLE_CITIZEN' | 'ROLE_MLA';
 
 export interface User {
-  aadhar: string;
+  id: string;
+  email: string;
   username: string;
   role: UserRole;
   citizenHash: string;
   mla_id?: string;
-  mla_info?: any;
+  mla_info?: {
+    id: string;
+    name: string;
+    constituency: string;
+    party: string;
+    ward: string;
+    zone: string;
+  };
 }
 
 export interface Issue {
@@ -27,22 +35,38 @@ export interface Issue {
   created_at: string;
 }
 
+export interface MLA {
+  id: string;
+  name: string;
+  constituency: string;
+  party: string;
+  ward: string;
+  zone: string;
+}
+
 interface StoreState {
   currentUser: User | null;
   issues: Issue[];
   selectedConstituency: string | null;
   leaderboard: any[];
   geoData: any | null;
-  
-  login: (aadhar: string, username: string) => Promise<boolean>;
+  mlas: MLA[];
+  isLiveMode: boolean;
+  authError: string | null;
+
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (email: string, password: string, username: string, mlaCode?: string, mlaWardId?: string) => Promise<boolean>;
   logout: () => void;
+  setAuthError: (err: string | null) => void;
   fetchIssues: () => Promise<void>;
   createIssue: (data: Partial<Issue>) => Promise<boolean>;
   updateIssueStatus: (id: number, status: string, summary?: string) => Promise<boolean>;
   upvoteIssue: (id: number) => Promise<void>;
   fetchLeaderboard: () => Promise<void>;
   fetchGeoData: () => Promise<void>;
+  fetchMlas: () => Promise<void>;
   setSelectedConstituency: (id: string | null) => void;
+  toggleLiveMode: () => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
@@ -51,25 +75,47 @@ export const useStore = create<StoreState>((set, get) => ({
   selectedConstituency: null,
   leaderboard: [],
   geoData: null,
+  mlas: [],
+  isLiveMode: false,
+  authError: null,
 
-  login: async (aadhar: string, username: string) => {
+  setAuthError: (err) => set({ authError: err }),
+
+  login: async (email, password) => {
+    set({ authError: null });
     try {
-      const res = await api.post('/auth', { aadhar, username });
+      const res = await api.post('/auth/login', { email, password });
       if (res.data.success) {
-        const user = res.data.user;
-        sessionStorage.setItem('polis_session', JSON.stringify(user));
-        set({ currentUser: user });
+        sessionStorage.setItem('polis_session', JSON.stringify(res.data.user));
+        set({ currentUser: res.data.user });
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e: any) {
+      set({ authError: e.message || 'Login failed' });
+      return false;
+    }
+  },
+
+  register: async (email, password, username, mlaCode, mlaWardId) => {
+    set({ authError: null });
+    try {
+      const res = await api.post('/auth/register', { email, password, username, mlaCode, mlaWardId });
+      if (res.data.success) {
+        sessionStorage.setItem('polis_session', JSON.stringify(res.data.user));
+        set({ currentUser: res.data.user });
+        return true;
+      }
+      return false;
+    } catch (e: any) {
+      set({ authError: e.message || 'Registration failed' });
       return false;
     }
   },
 
   logout: () => {
     sessionStorage.removeItem('polis_session');
-    set({ currentUser: null });
+    set({ currentUser: null, issues: [], leaderboard: [] });
   },
 
   fetchIssues: async () => {
@@ -77,45 +123,42 @@ export const useStore = create<StoreState>((set, get) => ({
       const res = await api.get('/issues');
       set({ issues: res.data });
     } catch (e) {
-      console.error(e);
+      console.error('[fetchIssues]', e);
     }
   },
 
-  createIssue: async (data: Partial<Issue>) => {
+  createIssue: async (data) => {
     const { currentUser } = get();
     if (!currentUser) return false;
-
     try {
-      await api.post('/issues', {
-        ...data,
-        reporter_hash: currentUser.citizenHash
-      });
+      await api.post('/issues', { ...data, reporter_hash: currentUser.citizenHash });
       await get().fetchIssues();
       return true;
     } catch (e) {
+      console.error('[createIssue]', e);
       return false;
     }
   },
 
-  updateIssueStatus: async (id: number, status: string, summary?: string) => {
+  updateIssueStatus: async (id, status, summary) => {
     try {
       await api.patch(`/issues/${id}`, { status, resolution_summary: summary });
       await get().fetchIssues();
       return true;
     } catch (e) {
+      console.error('[updateIssueStatus]', e);
       return false;
     }
   },
 
-  upvoteIssue: async (id: number) => {
+  upvoteIssue: async (id) => {
     const { currentUser } = get();
     if (!currentUser) return;
-
     try {
       await api.post(`/issues/${id}/upvote`, { citizen_hash: currentUser.citizenHash });
       await get().fetchIssues();
     } catch (e) {
-      console.error(e);
+      console.error('[upvoteIssue]', e);
     }
   },
 
@@ -124,7 +167,7 @@ export const useStore = create<StoreState>((set, get) => ({
       const res = await api.get('/leaderboard');
       set({ leaderboard: res.data });
     } catch (e) {
-      console.error(e);
+      console.error('[fetchLeaderboard]', e);
     }
   },
 
@@ -132,12 +175,24 @@ export const useStore = create<StoreState>((set, get) => ({
     if (get().geoData) return;
     try {
       const res = await fetch('/MUMBAI.geojson');
+      if (!res.ok) throw new Error('GeoJSON not found');
       const data = await res.json();
       set({ geoData: data });
     } catch (e) {
-      console.error('Failed to fetch GeoJSON', e);
+      console.error('[fetchGeoData]', e);
     }
   },
 
-  setSelectedConstituency: (id: string | null) => set({ selectedConstituency: id })
+  fetchMlas: async () => {
+    if (get().mlas.length > 0) return;
+    try {
+      const res = await api.get('/mlas');
+      set({ mlas: res.data });
+    } catch (e) {
+      console.error('[fetchMlas]', e);
+    }
+  },
+
+  setSelectedConstituency: (id) => set({ selectedConstituency: id }),
+  toggleLiveMode: () => set((state) => ({ isLiveMode: !state.isLiveMode })),
 }));

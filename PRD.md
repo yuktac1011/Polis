@@ -61,6 +61,20 @@ A dual-mode civic transparency platform where citizens report issues anonymously
     *   **Sync Logic:** Moving a card to "Resolved" must immediately change the corresponding Pin's color on the Map to Green.
 *   **Accountability Leaderboard (USP):**
     *   A ranking of MLAs based on "Resolution Rate" (Resolved / Total Issues).
+*   **Gamification Layer (Incentivized Action):**
+    *   **Resolve-to-Earn:** Users earn points for "resolving" issues.
+    *   **Badges:** Unlockable achievements like "Fast Resolver" (speed-based) and "City Hero" (volume-based).
+*   **"Live City Pulse" Mode:**
+    *   **Live Toggle:** A switch to enable real-time mode.
+    *   **Animate & Glow:** Pins slightly animate (pulse), and recently added issues feature a "glow" effect.
+    *   **Activity Feed:** A live-updating sidebar feed of recent city activity.
+*   **"Command Center Mode" (AI Interface):**
+    *   **Central Control:** A command bar for natural language-like queries (e.g., "Show all critical issues near me").
+    *   **System Automation:** The map auto-zooms and the Kanban board auto-filters based on the query, providing a "Jarvis/AI" feel.
+*   **Smart Auto-Clustering (Visual WOW):**
+    *   **Dynamic Merging:** Nearby pins merge into clusters (e.g., "5 issues here") when zoomed out.
+    *   **Expansion:** Clicking a cluster expands it into individual pins with a smooth animation.
+
 
 ---
 

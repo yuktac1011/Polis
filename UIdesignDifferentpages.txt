@@ -1,0 +1,1582 @@
+<!-- Civic Discovery Map (Premium) -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civic Discovery Map - Mumbai</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "secondary": "#5c5f61",
+                        "background": "#fcf8fa",
+                        "secondary-fixed": "#e0e3e5",
+                        "surface-container": "#f0edef",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed": "#191c1e",
+                        "inverse-surface": "#303032",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-container": "#7c839b",
+                        "on-secondary-container": "#626567",
+                        "outline": "#76777d",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e4e2e4",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary-container": "#002113",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fa",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-container": "#009668",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#f6f3f5",
+                        "error": "#ba1a1a",
+                        "primary": "#000000",
+                        "surface-dim": "#dcd9db",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e0e3e5",
+                        "on-tertiary-fixed": "#002113",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45464d",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#565e74",
+                        "inverse-on-surface": "#f3f0f2",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c4c7c9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "container-max": "1200px",
+                        "md": "16px",
+                        "xxl": "64px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "display": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "caption": ["14px", { "lineHeight": "1.4", "letterSpacing": "0em", "fontWeight": "500" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-hidden flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-['Public_Sans'] text-sm font-medium h-screen w-64 border-r border-slate-200 dark:border-slate-800 fixed left-0 top-0 z-40 flex flex-col p-6 gap-y-8">
+<!-- Header -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img alt="Project Polis Logo" class="w-full h-full object-cover" data-alt="Abstract geometric civic logo mark in stark monochrome black and white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGs2kRmk29D6k6KzLfzjxv_inFDGY2HaXVvpjK9D6Ch-loVHK0Q668tb-Mktc_V-U4y3NYMlkbnhj1UFORl2qlUpXK6_6HeI4LVbsdoG1ie89KDqtJTukgDlwbIc8ZvrVTwHfSz87xGo9kehTrrvg0bYibLvW7SqzQvODlclBdJKZcVJIdHeYgQibmUpnhi6QTD_mcEO4c4QHfujJ-ztLfCvtCyPez4q--92UtHIFYnFhfk0reB8m-lRmNAr6M0zBKgpcbwGfy0Dxa"/>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-black tracking-tighter text-slate-900 dark:text-slate-50 leading-tight">Project Polis</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Civic Infrastructure</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">monitoring</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">report_problem</span>
+                Civic Issues
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+                Department Map
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+                Project Archive
+            </a>
+</div>
+<!-- CTA -->
+<button class="mt-auto flex items-center justify-center w-full py-2.5 px-4 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">
+            Submit Feedback
+        </button>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="ml-64 flex-1 flex flex-col h-screen relative">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 text-slate-900 dark:text-slate-50 font-['Public_Sans'] antialiased docked full-width top-0 sticky z-50 border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_2px_15px_-3px_rgba(15,23,42,0.07)]">
+<div class="flex items-center justify-between px-8 h-16 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPulse</span>
+<!-- Search Bar -->
+<div class="relative hidden md:flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-50 w-64 transition-all" placeholder="Search locations, issues..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden ml-2 border border-slate-200 dark:border-slate-700">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="Professional headshot of a person in a minimalist modern office setting, soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfOY6nRuJTO664OjPCEDYPBydVtjcp-RgPXYkc8dW4hEwRVeIdrO8XWVC0rK_17Ab6gl7-PnGiJBr9vW_O_jAP_ArZHb2fhPFTM1N1xu34B4Cf0yUa8nkZk3Vg3lqltBSff9n79iSrw5Llx9Mjtnb1LgBM1Pv2xnAzKQpcf00y6U2i_ggMN-q6pynS0LlL3zHzMRpt2TxV0p9NWiajiIWCRPb1kteH95hOBfoF8URS1nJEbQ7hF0HwBNKJmot0MZRysXxgjQPM6KHx"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Map Canvas -->
+<div class="flex-1 relative w-full overflow-hidden bg-surface-container-low">
+<!-- Map Background Image (Simulating SVG) -->
+<img class="absolute inset-0 w-full h-full object-cover opacity-90 grayscale contrast-125 brightness-110" data-alt="Minimalist high-fidelity map of Mumbai in muted grayscale tones with clean lines for roads and waterways from a top-down perspective" data-location="Mumbai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGjodW9Viz3RfAkdalObbUSr1zf1yZJikryJdAh_aGi9svkmQpxa9nfTd0NaI0n8NQyGoJTWPxZ70IGKJJ_OOqIqFdwHEiTSB2qrKfF4Qf3LOChwQ_Mb8YWl8WH9RYTw2kcHI_-b_8oyfVvUKvOSYTFIYOTN16yBrNUlrrsKzf43G4STfr8ZQzmebGPCuysl5Gh6IoNx6rp1cBea-4dAdBUafLC3PPW5cGwTmtcyIZgYuII__WSvSbGu152TRNOrpaZR5__s2vqDBN"/>
+<!-- Map Gradient Overlay to ensure contrast for UI -->
+<div class="absolute inset-0 bg-gradient-to-r from-on-primary/40 to-transparent pointer-events-none"></div>
+<!-- Glassmorphic Side Panel: Trending Issues -->
+<div class="absolute top-lg left-lg w-80 bg-on-primary/80 backdrop-blur-[12px] border border-outline-variant/30 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col overflow-hidden pointer-events-auto">
+<div class="p-md border-b border-outline-variant/20 flex items-center justify-between">
+<h2 class="font-h2 text-h2 text-on-surface">Trending Issues</h2>
+<span class="material-symbols-outlined text-on-surface-variant">tune</span>
+</div>
+<div class="flex flex-col p-xs gap-xs overflow-y-auto max-h-[calc(100vh-200px)]">
+<!-- Issue Card 1 -->
+<div class="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm text-error">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-label-caps text-label-caps uppercase text-error">Critical</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant">2h ago</span>
+</div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Water Main Break</h3>
+<p class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                            Bandra West, Link Road
+                        </p>
+</div>
+<!-- Issue Card 2 -->
+<div class="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm text-tertiary-container">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">construction</span>
+<span class="font-label-caps text-label-caps uppercase text-tertiary-container">Elevated</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant">5h ago</span>
+</div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Road Subsidence</h3>
+<p class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                            Andheri East, MIDC
+                        </p>
+</div>
+<!-- Issue Card 3 -->
+<div class="p-md bg-on-primary/60 rounded-lg border border-outline-variant/10 hover:bg-surface-variant transition-colors cursor-pointer group">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm text-outline">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">power_off</span>
+<span class="font-label-caps text-label-caps uppercase text-outline">Monitoring</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant">1d ago</span>
+</div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Grid Fluctuation</h3>
+<p class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                            South Mumbai, Fort Area
+                        </p>
+</div>
+</div>
+</div>
+<!-- Animated Map Pins -->
+<!-- Pin 1 (Active/Critical) -->
+<div class="absolute top-[40%] left-[60%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer pointer-events-auto">
+<div class="relative flex items-center justify-center">
+<!-- Halo -->
+<div class="absolute w-12 h-12 bg-error/20 rounded-full animate-ping"></div>
+<div class="absolute w-8 h-8 bg-error/30 rounded-full"></div>
+<!-- Pin Body -->
+<div class="relative w-4 h-4 bg-error rounded-full shadow-[0_2px_8px_rgba(186,26,26,0.6)] border-2 border-on-primary z-10 transition-transform group-hover:scale-125"></div>
+</div>
+</div>
+<!-- Pin 2 (Elevated) -->
+<div class="absolute top-[55%] left-[45%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer pointer-events-auto">
+<div class="relative flex items-center justify-center">
+<div class="absolute w-10 h-10 bg-tertiary-container/10 rounded-full animate-pulse"></div>
+<div class="relative w-3 h-3 bg-tertiary-container rounded-full shadow-md border-2 border-on-primary z-10 transition-transform group-hover:scale-125"></div>
+</div>
+</div>
+<!-- Pin 3 (Monitoring) -->
+<div class="absolute top-[70%] left-[55%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer pointer-events-auto">
+<div class="relative flex items-center justify-center">
+<div class="relative w-3 h-3 bg-outline rounded-full shadow-sm border-2 border-on-primary z-10 transition-transform group-hover:scale-125"></div>
+</div>
+</div>
+<!-- Map Controls Overlay -->
+<div class="absolute bottom-xl right-xl bg-on-primary border border-outline-variant/50 rounded-xl shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),0_2px_4px_-2px_rgba(15,23,42,0.03)] flex flex-col p-xs gap-1 pointer-events-auto">
+<button aria-label="Zoom In" class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</button>
+<div class="w-full h-px bg-outline-variant/30 my-xs"></div>
+<button aria-label="Zoom Out" class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="w-full h-px bg-outline-variant/30 my-xs"></div>
+<button aria-label="Map Layers" class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-on-surface rounded-lg transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">layers</span>
+</button>
+<div class="w-full h-px bg-outline-variant/30 my-xs"></div>
+<button aria-label="My Location" class="p-2 text-primary hover:bg-surface-container rounded-lg transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">my_location</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Aadhar Verification Gate (Premium) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civic Hub - Secure Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#fcf8fa",
+                    "outline-variant": "#c6c6cd",
+                    "secondary": "#5c5f61",
+                    "background": "#fcf8fa",
+                    "secondary-fixed": "#e0e3e5",
+                    "surface-container": "#f0edef",
+                    "inverse-primary": "#bec6e0",
+                    "on-secondary-fixed": "#191c1e",
+                    "inverse-surface": "#303032",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-primary-container": "#7c839b",
+                    "on-secondary-container": "#626567",
+                    "outline": "#76777d",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e4e2e4",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-background": "#1b1b1d",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary-container": "#002113",
+                    "primary-container": "#131b2e",
+                    "on-error": "#ffffff",
+                    "surface": "#fcf8fa",
+                    "surface-container-high": "#eae7e9",
+                    "on-secondary-fixed-variant": "#444749",
+                    "on-tertiary-container": "#009668",
+                    "tertiary": "#000000",
+                    "surface-container-low": "#f6f3f5",
+                    "error": "#ba1a1a",
+                    "primary": "#000000",
+                    "surface-dim": "#dcd9db",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#e0e3e5",
+                    "on-tertiary-fixed": "#002113",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#45464d",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#565e74",
+                    "inverse-on-surface": "#f3f0f2",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1b1d",
+                    "on-primary-fixed": "#131b2e",
+                    "surface-container-highest": "#e4e2e4",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#c4c7c9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "container-max": "1200px",
+                    "md": "16px",
+                    "xxl": "64px"
+            },
+            "fontFamily": {
+                    "h2": [
+                            "Public Sans"
+                    ],
+                    "caption": [
+                            "Public Sans"
+                    ],
+                    "h1": [
+                            "Public Sans"
+                    ],
+                    "display": [
+                            "Public Sans"
+                    ],
+                    "label-caps": [
+                            "Public Sans"
+                    ],
+                    "body-lg": [
+                            "Public Sans"
+                    ],
+                    "body-md": [
+                            "Public Sans"
+                    ]
+            },
+            "fontSize": {
+                    "h2": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "caption": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "h1": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.015em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "letterSpacing": "-0.005em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "letterSpacing": "0em",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex items-center justify-center bg-background overflow-hidden font-body-md text-on-surface antialiased">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<img alt="" class="w-full h-full object-cover opacity-80 mix-blend-multiply" data-alt="Modern Indian city skyline at dawn, sleek skyscrapers enveloped in soft morning mist, cinematic warm lighting, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSxgQcdgkbUPYFMmjmsC1sXXByVPZJPhm6y15bANEcLcvJHMosDdeFyXNqEOQ2FbLg7_F7gHY7Uro95E2KIYOk94ukmQWxJ3zAjSf0P8bs8rcxhsPfixzQmamFiOjNGmp2bWgiL4M3b6AquzpyAZEIW6u2Eu5JsXw4eEirJ3RWO7It1UZF0t7V8p6nSzWF6RAutZ0bWObgjaEM5qMLyXC3bVtYwu1LQJNLmonX4SAhQLg6Cv0YqbS0kENS0Y2WGtIzy5fjvbg3mSj_"/>
+<!-- Heavy Blur Overlay to push focus to the card -->
+<div class="absolute inset-0 backdrop-blur-[40px] bg-surface/50"></div>
+<!-- Subtle Vignette -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
+</div>
+<!-- Verification Card Container -->
+<main class="relative z-10 w-full max-w-[480px] px-lg">
+<div class="bg-surface/80 backdrop-blur-2xl rounded-[32px] border border-outline-variant/30 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.1)] p-xl flex flex-col items-center text-center">
+<!-- Brand / Icon -->
+<div class="w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant/50 flex items-center justify-center mb-lg shadow-sm">
+<span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings: 'FILL' 1;">
+                    shield_lock
+                </span>
+</div>
+<!-- Headers -->
+<h1 class="font-h1 text-h1 text-on-surface mb-xs">Secure Verification</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl max-w-[300px] mx-auto">
+                Please authenticate with your 12-digit Aadhar to access your Civic Hub.
+            </p>
+<!-- Form Area -->
+<form class="w-full" onsubmit="event.preventDefault();">
+<div class="relative w-full text-left">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-sm tracking-widest pl-xs" for="aadhar-input">
+                        AADHAR NUMBER
+                    </label>
+<div class="relative group">
+<input class="w-full h-[64px] px-lg rounded-xl bg-surface-container-lowest/50 backdrop-blur-md border border-outline-variant/50 text-center font-h2 text-h2 tracking-[0.15em] text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-300 placeholder:text-outline/50" id="aadhar-input" maxlength="14" placeholder="XXXX  XXXX  XXXX" type="text" value="4910  8273  1092"/>
+<!-- Validation Feedback (Mock Success) -->
+<div class="absolute right-md top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-[24px] text-on-tertiary-container drop-shadow-sm" style="font-variation-settings: 'FILL' 1;">
+                                check_circle
+                            </span>
+</div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant/70 mt-sm text-center">
+                        Verified via Verhoeff algorithm
+                    </p>
+</div>
+<!-- Primary Action -->
+<button class="mt-xl w-full h-[56px] rounded-xl bg-primary text-on-primary font-body-lg text-body-lg flex items-center justify-center gap-sm hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]" type="button">
+<span>Enter Civic Hub</span>
+<span class="material-symbols-outlined text-[20px]">
+                        arrow_forward
+                    </span>
+</button>
+</form>
+<!-- Footer Links -->
+<div class="mt-lg flex items-center justify-center gap-md font-caption text-caption text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<a class="hover:text-primary transition-colors" href="#">Privacy Terms</a>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Report & Suggest Flow (Premium) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Report &amp; Suggest Flow - CivicPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fcf8fa",
+                      "outline-variant": "#c6c6cd",
+                      "secondary": "#5c5f61",
+                      "background": "#fcf8fa",
+                      "secondary-fixed": "#e0e3e5",
+                      "surface-container": "#f0edef",
+                      "inverse-primary": "#bec6e0",
+                      "on-secondary-fixed": "#191c1e",
+                      "inverse-surface": "#303032",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "tertiary-fixed": "#6ffbbe",
+                      "on-primary-container": "#7c839b",
+                      "on-secondary-container": "#626567",
+                      "outline": "#76777d",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#e4e2e4",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-background": "#1b1b1d",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "primary-fixed-dim": "#bec6e0",
+                      "tertiary-container": "#002113",
+                      "primary-container": "#131b2e",
+                      "on-error": "#ffffff",
+                      "surface": "#fcf8fa",
+                      "surface-container-high": "#eae7e9",
+                      "on-secondary-fixed-variant": "#444749",
+                      "on-tertiary-container": "#009668",
+                      "tertiary": "#000000",
+                      "surface-container-low": "#f6f3f5",
+                      "error": "#ba1a1a",
+                      "primary": "#000000",
+                      "surface-dim": "#dcd9db",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#e0e3e5",
+                      "on-tertiary-fixed": "#002113",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#45464d",
+                      "on-tertiary": "#ffffff",
+                      "surface-tint": "#565e74",
+                      "inverse-on-surface": "#f3f0f2",
+                      "primary-fixed": "#dae2fd",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#c4c7c9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xs": "4px",
+                      "xl": "40px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "unit": "4px",
+                      "container-max": "1200px",
+                      "md": "16px",
+                      "xxl": "64px"
+              },
+              "fontFamily": {
+                      "h2": [
+                              "Public Sans"
+                      ],
+                      "caption": [
+                              "Public Sans"
+                      ],
+                      "h1": [
+                              "Public Sans"
+                      ],
+                      "display": [
+                              "Public Sans"
+                      ],
+                      "label-caps": [
+                              "Public Sans"
+                      ],
+                      "body-lg": [
+                              "Public Sans"
+                      ],
+                      "body-md": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "h2": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h1": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.015em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "-0.005em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="h-screen w-64 border-r fixed left-0 top-0 z-40 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col p-6 gap-y-8 font-['Public_Sans'] text-sm font-medium">
+<div class="flex items-center gap-x-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">PP</div>
+<div>
+<h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-slate-50">Project Polis</h2>
+<p class="font-caption text-caption text-on-surface-variant opacity-70">Civic Infrastructure</p>
+</div>
+</div>
+<div class="flex-grow flex flex-col gap-y-2">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Analytics (Inactive) -->
+<a class="flex items-center gap-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span>Analytics</span>
+</a>
+<!-- Civic Issues (Active) -->
+<a class="flex items-center gap-x-3 px-4 py-3 bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="report_problem" data-weight="fill" style="font-variation-settings: 'FILL' 1;">report_problem</span>
+<span>Civic Issues</span>
+</a>
+<!-- Department Map (Inactive) -->
+<a class="flex items-center gap-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span>Department Map</span>
+</a>
+<!-- Project Archive (Inactive) -->
+<a class="flex items-center gap-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Project Archive</span>
+</a>
+</div>
+<button class="mt-auto w-full py-3 px-4 rounded-lg bg-primary text-on-primary font-caption text-caption hover:opacity-90 transition-opacity">
+            Submit Feedback
+        </button>
+</nav>
+<!-- Main Content Area -->
+<div class="ml-64 relative min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="docked full-width top-0 sticky z-50 bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_2px_15px_-3px_rgba(15,23,42,0.07)] flex items-center justify-between px-8 h-16 w-full max-w-[1440px] mx-auto font-['Public_Sans'] antialiased">
+<div class="flex items-center gap-x-lg">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPulse</span>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border-none rounded-full text-sm focus:ring-2 focus:ring-slate-900 outline-none w-64 text-slate-900 dark:text-slate-50 transition-all" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-x-4">
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 border border-slate-200/60">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="professional headshot of an administrator in a civic setting, bright lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDn7benAcZ28nOvPDXVQqlyFu-Oz-bjjJ4-BJ0cgYKna_U1jDuiiwVZBhKflsPEI8cTUvmQWoIlByCS3hS_4JP3FVyL1Islc2wPXOjBgl9bAJEeH4nB0ATWm0f6Krr9R5E9u2Hr2IiiCub6ue0fRPmqbwwxBNqUqe2A4NUe_SOGQOjukFdy4r3aIoLYCrE0dTXG1PwH4wP73q9A8RfMB1iHQqEejBJmA7OGQWT47sWI2cNDoqW4wi-2yjHRnuChWkMaZeyj8FL1lQz"/>
+</div>
+</div>
+</header>
+<!-- Canvas: Map Background & Overlay -->
+<main class="flex-grow relative w-full h-[calc(100vh-64px)]">
+<!-- Map Background Image -->
+<div class="absolute inset-0 z-0">
+<img alt="City Map" class="w-full h-full object-cover opacity-80" data-alt="top down view of a stylized digital city map with light grey and subtle blue tones, clean vector aesthetic" data-location="Seattle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-j0ZakGqJrfJQuJI1sOAKyAYpRxn40-GoTvLCY6GBjf_sJrVDC7ZL-JSoIkiYjJ8pMMSVTZW4F6U_EmZN-9Y-S6RVfvJQ6A2SsEq5YO-64MiVBbvdCbV50H-iDAD0X4St3lA8haQNv2eA6ymSdGmKqTs9D9ZlnNaI83Qxrh6j4ayrP2GIJ1yWBj1msimGVquRbUvPqegFXYQQnEZxMa1KMGI9vgXZUAwkO899eaYv-VAo1OTTGEi5bwbAU-9VsRkA92bYYuhU6KOy"/>
+</div>
+<!-- Dimming Overlay -->
+<div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-[2px] z-10 transition-all duration-500"></div>
+<!-- Interactive Map Pin Area (Center) -->
+<div class="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none pr-[480px]">
+<div class="relative flex flex-col items-center group cursor-crosshair pointer-events-auto">
+<!-- Location Tooltip -->
+<div class="absolute -top-12 bg-surface-bright px-4 py-2 rounded-lg shadow-lg border border-outline-variant font-caption text-caption text-on-surface whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-y-2 group-hover:translate-y-0">
+                        Drop pin to report
+                    </div>
+<!-- The Pin -->
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-xl border-4 border-surface-bright transform hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-on-primary" data-icon="location_on" data-weight="fill" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<!-- Pulse Effect -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary/30 rounded-full animate-ping -z-10"></div>
+<div class="w-2 h-2 bg-primary rounded-full mt-2 shadow-sm"></div>
+</div>
+</div>
+<!-- Sleek Side Drawer Form (Right Anchored) -->
+<aside class="absolute right-0 top-0 bottom-0 w-[480px] bg-surface-bright/95 backdrop-blur-xl border-l border-outline-variant shadow-[0_0_40px_-10px_rgba(0,0,0,0.1)] z-30 flex flex-col transform transition-transform duration-500 ease-out translate-x-0">
+<!-- Drawer Header -->
+<div class="px-xl py-lg flex items-center justify-between border-b border-surface-variant">
+<h2 class="font-h2 text-h2 text-on-surface">Report an Issue</h2>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Drawer Scrollable Content -->
+<div class="flex-grow overflow-y-auto px-xl py-lg flex flex-col gap-y-xl">
+<!-- Location Summary Card -->
+<div class="bg-surface rounded-xl border border-outline-variant p-md flex items-start gap-x-md shadow-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary shrink-0 mt-1">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">Selected Location</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">402 Civic Center Drive</p>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Latitude: 47.6062° N, Longitude: 122.3321° W</p>
+</div>
+<button class="ml-auto text-primary text-sm font-medium hover:underline mt-1">Edit</button>
+</div>
+<!-- Category Selection (Bento Grid) -->
+<div>
+<h3 class="font-h2 text-h2 text-on-surface mb-md text-[18px]">Category</h3>
+<div class="grid grid-cols-2 gap-sm">
+<button class="bg-surface border border-primary p-md rounded-xl flex flex-col items-start gap-y-sm shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] transition-all text-left">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="add_road">add_road</span>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold">Infrastructure</span>
+</button>
+<button class="bg-surface border border-outline-variant hover:border-outline p-md rounded-xl flex flex-col items-start gap-y-sm transition-all text-left group">
+<div class="w-8 h-8 rounded-full bg-surface-container-high group-hover:bg-surface-variant flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant group-hover:text-on-surface font-medium transition-colors">Sanitation</span>
+</button>
+<button class="bg-surface border border-outline-variant hover:border-outline p-md rounded-xl flex flex-col items-start gap-y-sm transition-all text-left group">
+<div class="w-8 h-8 rounded-full bg-surface-container-high group-hover:bg-surface-variant flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="park">park</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant group-hover:text-on-surface font-medium transition-colors">Parks &amp; Rec</span>
+</button>
+<button class="bg-surface border border-outline-variant hover:border-outline p-md rounded-xl flex flex-col items-start gap-y-sm transition-all text-left group">
+<div class="w-8 h-8 rounded-full bg-surface-container-high group-hover:bg-surface-variant flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="traffic">traffic</span>
+</div>
+<span class="font-caption text-caption text-on-surface-variant group-hover:text-on-surface font-medium transition-colors">Traffic &amp; Signs</span>
+</button>
+</div>
+</div>
+<!-- Details Input -->
+<div>
+<h3 class="font-h2 text-h2 text-on-surface mb-md text-[18px]">Details</h3>
+<div class="flex flex-col gap-y-md">
+<textarea class="w-full bg-surface border border-outline-variant rounded-xl p-md font-body-md text-body-md text-on-surface placeholder:text-outline focus:ring-0 focus:border-primary transition-colors resize-none shadow-sm" placeholder="Describe the issue specifically..." rows="4"></textarea>
+<!-- Photo Upload Target -->
+<div class="w-full border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center gap-y-sm bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="add_a_photo">add_a_photo</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant text-center">
+<span class="font-medium text-primary">Click to upload</span> or drag and drop<br/>
+<span class="text-[12px] opacity-70">PNG, JPG, HEIC up to 10MB</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Footer (Actions) -->
+<div class="px-xl py-lg border-t border-surface-variant bg-surface-bright mt-auto flex items-center justify-end gap-x-md">
+<button class="font-caption text-caption text-on-surface-variant hover:text-on-surface px-lg py-3 rounded-lg border border-transparent hover:border-outline-variant transition-all">
+                        Save Draft
+                    </button>
+<button class="font-caption text-caption text-on-primary bg-primary px-lg py-3 rounded-lg hover:opacity-90 shadow-sm transition-opacity flex items-center gap-x-2">
+<span>Submit Report</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</aside>
+</main>
+</div>
+</body></html>
+
+<!-- Kanban Status Automaton (Premium) -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civic Issues Kanban</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom subtle shadow for premium cards as per Surface 1 guidance */
+        .shadow-surface-1 {
+            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+        }
+    </style>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "secondary": "#5c5f61",
+                        "background": "#fcf8fa",
+                        "secondary-fixed": "#e0e3e5",
+                        "surface-container": "#f0edef",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed": "#191c1e",
+                        "inverse-surface": "#303032",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-container": "#7c839b",
+                        "on-secondary-container": "#626567",
+                        "outline": "#76777d",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e4e2e4",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary-container": "#002113",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fa",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-container": "#009668",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#f6f3f5",
+                        "error": "#ba1a1a",
+                        "primary": "#000000",
+                        "surface-dim": "#dcd9db",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e0e3e5",
+                        "on-tertiary-fixed": "#002113",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45464d",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#565e74",
+                        "inverse-on-surface": "#f3f0f2",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c4c7c9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "container-max": "1200px",
+                        "md": "16px",
+                        "xxl": "64px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Public Sans", "sans-serif"],
+                        "caption": ["Public Sans", "sans-serif"],
+                        "h1": ["Public Sans", "sans-serif"],
+                        "display": ["Public Sans", "sans-serif"],
+                        "label-caps": ["Public Sans", "sans-serif"],
+                        "body-lg": ["Public Sans", "sans-serif"],
+                        "body-md": ["Public Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "caption": ["14px", { "lineHeight": "1.4", "letterSpacing": "0em", "fontWeight": "500" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar Component -->
+<aside class="h-screen w-64 border-r fixed left-0 top-0 z-40 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 font-['Public_Sans'] text-sm font-medium text-slate-900 dark:text-slate-50 flex flex-col p-6 gap-y-8">
+<!-- Header -->
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-surface-container shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div>
+<h1 class="text-lg font-black tracking-tighter text-slate-900 dark:text-slate-50 leading-tight">Project Polis</h1>
+<p class="font-caption text-caption text-on-surface-variant">Civic Infrastructure</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+                Analytics
+            </a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-sm px-3 py-2 bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined fill">report_problem</span>
+                Civic Issues
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">map</span>
+                Department Map
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Project Archive
+            </a>
+</nav>
+<!-- CTA -->
+<button class="mt-auto flex items-center justify-center gap-sm w-full py-3 px-4 bg-surface-container text-on-surface font-caption text-caption rounded-lg border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+            Submit Feedback
+        </button>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar Component -->
+<header class="docked full-width top-0 sticky z-50 bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_2px_15px_-3px_rgba(15,23,42,0.07)] text-slate-900 dark:text-slate-50 font-['Public_Sans'] antialiased">
+<div class="flex items-center justify-between px-8 h-16 w-full max-w-[1440px] mx-auto">
+<!-- Left: Brand & Search -->
+<div class="flex items-center gap-xl">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPulse</span>
+<div class="relative hidden md:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant rounded-full font-body-md text-body-md text-on-surface focus:border-primary focus:ring-0 transition-colors placeholder:text-outline" placeholder="Search issues..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error"></span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-sm cursor-pointer hover:opacity-80 transition-opacity">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="close up professional headshot of man with glasses against clean light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2gCZhRAZj3tVcXPOgXOWX3deyPCQZLt52nYfjC10y7Zev11saDqkIQpeKnrTWoGVdDeql7kj7BKzCwVRiat4P-n6P5ap3FlcU4T-qZKjY9SqmoOyuFJ937mmhJLjMbxSbbl94T9NX0aaivk2Sz45K_nLMpVVSsoVZMSkRWsHvvVh5X9lCWKBHHZ6pd3hGfLxCcz3bf01Ayo5NDNdoId7desyY5nen6oC44VuIpzsajC45z48fPGNxJGGyb_8aIBDSCN55nlqKyofS"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas Area -->
+<main class="flex-1 p-xl max-w-container-max mx-auto w-full overflow-x-auto">
+<!-- Board Header -->
+<div class="flex items-center justify-between mb-lg">
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">Active Interventions</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Tracking reported civic infrastructure issues and resolutions.</p>
+</div>
+<button class="flex items-center gap-sm h-12 px-lg bg-primary text-on-primary font-caption text-caption rounded-xl hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    New Ticket
+                </button>
+</div>
+<!-- Kanban Columns Container -->
+<div class="flex gap-lg h-full items-start pb-xl">
+<!-- Column: Pending Review -->
+<div class="flex-1 min-w-[320px] max-w-[400px] flex flex-col gap-md bg-surface-container-low/60 backdrop-blur-md rounded-xl p-md border border-outline-variant/50">
+<div class="flex items-center justify-between px-xs pb-sm">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<h3 class="font-caption text-caption text-on-surface uppercase tracking-wider">Pending Review</h3>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-caps text-label-caps">3</span>
+</div>
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-[4px] border-l-secondary p-md shadow-surface-1 hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing relative overflow-hidden">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-xs text-outline opacity-0 group-hover:opacity-100 transition-opacity absolute top-md right-md">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">INF-204</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface mb-xs pr-6">Pothole Repair on Main St</h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2 mb-md">Multiple reports of a severe pothole causing vehicle damage near the 4th Ave intersection.</p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full bg-surface-container border-2 border-surface-container-lowest flex items-center justify-center text-xs font-bold text-on-surface">U</div>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-caption text-caption">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">thumb_up</span>
+<span class="text-on-surface font-semibold">12</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-[4px] border-l-secondary p-md shadow-surface-1 hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing relative overflow-hidden">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-xs text-outline opacity-0 group-hover:opacity-100 transition-opacity absolute top-md right-md">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">SNT-089</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface mb-xs pr-6">Missed Trash Collection</h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2 mb-md">Entire block of Elmwood Dr was skipped during yesterday's routine pickup schedule.</p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="flex -space-x-2">
+<img alt="Assignee" class="w-7 h-7 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="small circular portrait of a young woman smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFQMdJEBQDYKYVm6yz7fLQ0xI7WoP4g_Cb8PnEVkXYz3ldM1XKy0nswvC7D7sZfz5TIBGAQPwx7oRutU7u55q8B3_bAqltazvp-zBLcwxjUsvOCqQAput1V5fcf4ud2rNGEAGN1kq3W7US7H97VWw5w3hS1jCkRNjSDfSmhTS0PMMU9wcvpMQ_hS0-S_Dz4eiQERgt8YaxBn5x1ggeMGGQq7YlhYp3H_5S3jMwsQqrVUFyt5XvnKLSoY-VoF6N5KC5AiiTe6Tz9njT"/>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-caption text-caption">
+<span class="material-symbols-outlined text-[16px]">thumb_up</span>
+<span>4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="flex-1 min-w-[320px] max-w-[400px] flex flex-col gap-md bg-surface-container-low/60 backdrop-blur-md rounded-xl p-md border border-outline-variant/50">
+<div class="flex items-center justify-between px-xs pb-sm">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<h3 class="font-caption text-caption text-on-surface uppercase tracking-wider">Active Resolution</h3>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-caps text-label-caps">2</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-[4px] border-l-tertiary-fixed-dim p-md shadow-surface-1 hover:shadow-md transition-shadow group cursor-grab active:cursor-grabbing relative overflow-hidden">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-xs text-outline opacity-0 group-hover:opacity-100 transition-opacity absolute top-md right-md">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-tertiary-container bg-tertiary-fixed/20 px-2 py-1 rounded-md">LGT-142</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface mb-xs pr-6">Streetlight Outage, Park Ave</h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2 mb-md">Crew dispatched. Assessing electrical fault in the sub-surface wiring junction.</p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="flex -space-x-2">
+<img alt="Assignee" class="w-7 h-7 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="small circular portrait of a man looking forward" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtqUTXKqtNiu5VRlWxYBg9hDScLWNIxedLzv1Vbsu_fe-z0o2aVgLGb5ShnG6MO9_eQIzzmFq-06fsKjsVMWkQbS8IrURpjZgpgSGstXnq-DFuZgyvD586ZK5002LkhpfIDqplRhl7MTXvsouQpQ5y2hNcuMsnUcDy_w_isCyy8Zkzg2GGZ8wLL2t8epXGT8FrDTQF5UPTHzxtepA4B_yiXQVYsmCjXz07dkQdhtYZnH2ikqMvgE42A6ZlXX_auJlKbbln8kJlTkEh"/>
+<img alt="Assignee" class="w-7 h-7 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="small circular portrait of a woman looking forward" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl1oVh4-VHIxvT0IEzJG9Em_l1OVItZuyjl18cVG5XIiUcC7q434uR2qJvjYpe8n7CKH5aRdtD55FRHaHDoUSJKTjDPTz1fTFHWRApKXG-8yWEhZkqDphV7hIOuf47Igd0-k58pFGdHn-JAQwj0B4utEnfvJarhLsoX-TOygdu4pR8QJPZ5u3NIhsAO5BVZuY5IHv27AxM6cLfkYZv9y9LCLK8dPQigCwuEw_5ewyH_XCOL4ctqrjIyqbt9LxEJyP4kQp7RroqGCQx"/>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-caption text-caption">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">thumb_up</span>
+<span class="text-on-surface font-semibold">45</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Resolved -->
+<div class="flex-1 min-w-[320px] max-w-[400px] flex flex-col gap-md bg-surface-container-low/60 backdrop-blur-md rounded-xl p-md border border-outline-variant/50 opacity-80">
+<div class="flex items-center justify-between px-xs pb-sm">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<h3 class="font-caption text-caption text-on-surface uppercase tracking-wider">Resolved</h3>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-caps text-label-caps">1</span>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant border-l-[4px] border-l-outline p-md shadow-surface-1 opacity-75 hover:opacity-100 transition-opacity group cursor-grab active:cursor-grabbing relative overflow-hidden">
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-xs text-outline opacity-0 group-hover:opacity-100 transition-opacity absolute top-md right-md">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded-md line-through">WTR-011</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface mb-xs pr-6 line-through text-outline">Water Main Break</h4>
+<p class="font-caption text-caption text-on-surface-variant line-clamp-2 mb-md">Pressure restored. Surface patching scheduled for next week.</p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full bg-surface-container border-2 border-surface-container-lowest flex items-center justify-center text-xs font-bold text-on-surface">DP</div>
+</div>
+<div class="flex items-center gap-xs text-outline font-caption text-caption">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Closed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
+
+<!-- Accountability Leaderboard (Premium) -->
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Accountability Leaderboard - CivicPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "secondary": "#5c5f61",
+                        "background": "#fcf8fa",
+                        "secondary-fixed": "#e0e3e5",
+                        "surface-container": "#f0edef",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed": "#191c1e",
+                        "inverse-surface": "#303032",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-container": "#7c839b",
+                        "on-secondary-container": "#626567",
+                        "outline": "#76777d",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e4e2e4",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary-container": "#002113",
+                        "primary-container": "#131b2e",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fa",
+                        "surface-container-high": "#eae7e9",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-tertiary-container": "#009668",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#f6f3f5",
+                        "error": "#ba1a1a",
+                        "primary": "#000000",
+                        "surface-dim": "#dcd9db",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e0e3e5",
+                        "on-tertiary-fixed": "#002113",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45464d",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#565e74",
+                        "inverse-on-surface": "#f3f0f2",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "on-primary-fixed": "#131b2e",
+                        "surface-container-highest": "#e4e2e4",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c4c7c9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "container-max": "1200px",
+                        "md": "16px",
+                        "xxl": "64px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Public Sans"],
+                        "caption": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "display": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "caption": ["14px", { "lineHeight": "1.4", "letterSpacing": "0em", "fontWeight": "500" }],
+                        "h1": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md flex min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 font-['Public_Sans'] text-sm font-medium h-screen w-64 border-r fixed left-0 top-0 z-40 border-r border-slate-200 dark:border-slate-800 flex flex-col p-6 gap-y-8">
+<!-- Header -->
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img alt="Project Polis Logo" class="w-full h-full object-cover" data-alt="minimalist architectural logo design showing a stylized abstract building or civic structure in monochrome" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuIU796YypW9FsS8eKi_Wvu1fkU4VeTwS0hh7RjmI6fpwYRIKU_qTcsFRNZxMG4dQRR3EaWsUbxIQqiUqL8L9E_C7e9nmq3xOGKFZ3AT4SugWchzulouEByJJLwnbHq_SHHn4UcpAYifBAqpJJwO3r6-I6p41TEJvlwa_K3LN463HNkZAx1YYuXebYCQ-frE-zFyobD1xkyiZWQu_GzEV01gxY0CPgF8EYWvFGe_-XfnsBnFEJp-Bic9-f6-Bg9i_LmTpc_eARqTbD"/>
+</div>
+<div>
+<h2 class="text-lg font-black tracking-tighter text-slate-900 dark:text-slate-50">Project Polis</h2>
+<span class="text-xs text-slate-500 block">Civic Infrastructure</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-unit">
+<!-- Active Tab: Dashboard (Maps to Accountability Leaderboard Intent) -->
+<a class="flex items-center gap-md px-md py-sm bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="monitoring">monitoring</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="report_problem">report_problem</span>
+<span>Civic Issues</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="map">map</span>
+<span>Department Map</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-200 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="inventory_2">inventory_2</span>
+<span>Project Archive</span>
+</a>
+</div>
+<!-- CTA -->
+<button class="w-full py-md px-lg bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface font-caption text-caption hover:bg-surface-container-low transition-colors">
+            Submit Feedback
+        </button>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col min-w-0">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 text-slate-900 dark:text-slate-50 font-['Public_Sans'] antialiased docked full-width top-0 sticky z-50 border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_2px_15px_-3px_rgba(15,23,42,0.07)]">
+<div class="flex items-center justify-between px-8 h-16 w-full max-w-[1440px] mx-auto">
+<!-- Brand / Left Side -->
+<div class="flex items-center gap-lg">
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPulse</h1>
+<!-- Search Bar (on_left) -->
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border-none rounded-lg text-sm focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-50 outline-none transition-all" placeholder="Search data..." type="text"/>
+</div>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-md">
+<!-- Trailing Icons -->
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-px h-6 bg-slate-200 dark:bg-slate-800 mx-xs"></div>
+<!-- Profile -->
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 cursor-pointer hover:ring-2 ring-slate-900 dark:ring-slate-50 transition-all">
+<img alt="Administrator Profile" class="w-full h-full object-cover" data-alt="professional portrait of a male administrator in a light blue shirt smiling confidently against a neutral gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAomYZ_v3cmF1C21pbA3F3a7SCpzeI4TiRbCPV3w5l9CWkIJHKPosaXEz4PKFuPtVsTHBT2gqpjWQj1a-tjhzNJPPFGOIlDsA5QSxFNEXKJuGSLgc72AOcWCwUWfRuZ2UdMcjsK0CATEzVwddp1BtkFmApO2xE3vKlkAoO26VlvTNQNhyJNIkcdwUzLvgDHCSIJm-NxqFX_WLPdN_9xi_a_rS_nabcMDHGcZpTaf70ckAMo8O-Oj6GeI7LdDqyx3tA9YSaZ4A0il03a"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas Area -->
+<main class="flex-1 p-xl max-w-container-max mx-auto w-full flex flex-col gap-xxl">
+<!-- Page Header -->
+<div class="flex flex-col gap-sm">
+<h1 class="font-h1 text-h1 text-on-background">Accountability Leaderboard</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Tracking resolution metrics and operational efficiency across all civic constituencies in real-time.
+                </p>
+</div>
+<!-- Hero Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Overall Resolution</span>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface text-sm" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-display text-display text-on-background">84.2%</span>
+<span class="font-caption text-caption text-tertiary-fixed-dim pb-2 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span> 2.1%
+                        </span>
+</div>
+<!-- Decorative Sparkline -->
+<div class="w-full h-1 bg-surface-container-high rounded-full mt-auto overflow-hidden">
+<div class="h-full bg-primary w-[84%] rounded-full"></div>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Avg Response Time</span>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface text-sm" data-icon="timer">timer</span>
+</div>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-display text-display text-on-background">14h</span>
+<span class="font-caption text-caption text-tertiary-fixed-dim pb-2 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_downward">arrow_downward</span> 3h
+                        </span>
+</div>
+<!-- Decorative Sparkline Area -->
+<div class="w-full h-8 mt-auto flex items-end gap-1 opacity-60">
+<div class="w-1/6 h-full bg-outline-variant rounded-t-sm"></div>
+<div class="w-1/6 h-4/5 bg-outline-variant rounded-t-sm"></div>
+<div class="w-1/6 h-3/5 bg-outline-variant rounded-t-sm"></div>
+<div class="w-1/6 h-2/5 bg-outline-variant rounded-t-sm"></div>
+<div class="w-1/6 h-1/5 bg-primary rounded-t-sm"></div>
+<div class="w-1/6 h-1/6 bg-primary rounded-t-sm"></div>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Critical Backlog</span>
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-error-container text-sm" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-display text-display text-on-background">127</span>
+<span class="font-caption text-caption text-error pb-2 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span> 12
+                        </span>
+</div>
+<!-- Decorative Sparkline Area -->
+<div class="w-full h-8 mt-auto flex flex-col justify-center">
+<div class="w-full border-b-2 border-dashed border-error opacity-50 relative">
+<div class="absolute right-0 -top-1 w-2 h-2 rounded-full bg-error"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="flex flex-col gap-lg">
+<!-- Controls -->
+<div class="flex items-center justify-between bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-[0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 h-12 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-on-surface-variant" placeholder="Search constituencies..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-lg font-caption text-caption text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-xs h-12 px-md bg-surface-container-lowest border border-outline-variant rounded-lg font-caption text-caption text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="sort">sort</span>
+                            Sort: Rank
+                        </button>
+</div>
+</div>
+<!-- The Data Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05),_0_2px_4px_-2px_rgba(15,23,42,0.03)]">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-variant">
+<th class="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase w-24">Rank</th>
+<th class="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase">Constituency</th>
+<th class="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase">Representative</th>
+<th class="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase w-1/3">Resolution Index</th>
+<th class="p-lg font-label-caps text-label-caps text-on-surface-variant uppercase text-right">Trend</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors h-[72px]">
+<td class="px-lg py-md">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-caption text-caption font-bold text-on-surface">1</div>
+</td>
+<td class="px-lg py-md font-h2 text-h2 text-on-background text-[18px]">Northwood District</td>
+<td class="px-lg py-md text-on-surface-variant flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container overflow-hidden">
+<img alt="Sarah Jenkins" class="w-full h-full object-cover" data-alt="professional headshot of a middle-aged woman with short brown hair smiling warmly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgZ7686OwmwKvZeI9SjN4sDrLTvRXXGnaPLIlht51uxQnayHiFyOrEwtdAfvSv0ri0RcBdQUaX9YsjI1EAgGM1-mjToNeICeFGtpGucVuXFjONdNqXHm3yPzJuVVGrtcKig8GNds2YvddO3t3J5zG4AL6xyqdvy_MF4KLl1f_FoWsH_eO1O8MgCZMRKeODZjIffYCyrOjsn5ZzJ2w9MpK_h7ng_pDuNlzA0LzozNesCD83rkHbYK3oW-JlIORlQgVfCoMqlHg34Z1m"/>
+</div>
+                                    Sarah Jenkins
+                                </td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[92%]"></div>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold w-12 text-right">92%</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-container">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm" data-icon="trending_up">trending_up</span>
+</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors h-[72px]">
+<td class="px-lg py-md">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-caption text-caption font-bold text-on-surface">2</div>
+</td>
+<td class="px-lg py-md font-h2 text-h2 text-on-background text-[18px]">Westlake Valley</td>
+<td class="px-lg py-md text-on-surface-variant flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container overflow-hidden">
+<img alt="Marcus Chen" class="w-full h-full object-cover" data-alt="professional portrait of an asian man in a business suit looking directly at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5wo3PHXJ4UI2E5ukuchQkegC7zZfW5Yx5W1c0CKQDjqTu1xfkgfVe_gbJRWy903VxGMNnLinzMv_NHe-UG4WyrQr_eif8G0CN4ZTT_1tGuuNdGhFj6n5dtqtgo9ctMEvXW3KhSPNd4IkcMSSxCR6csA2dzWhALJWPxnm8YHvqrs5fteuF0ZYh7DKLv0AtP4d3OVffItDkIfogE1cWtWUwKLBgADFVZUkZBgJfVV6uarg1cPY7TUmMlf6WMYgvEsVMjrHU-5L1SM4y"/>
+</div>
+                                    Marcus Chen
+                                </td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[88%]"></div>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold w-12 text-right">88%</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-container">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm" data-icon="trending_up">trending_up</span>
+</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors h-[72px]">
+<td class="px-lg py-md">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-caption text-caption font-bold text-on-surface">3</div>
+</td>
+<td class="px-lg py-md font-h2 text-h2 text-on-background text-[18px]">Eastside Borough</td>
+<td class="px-lg py-md text-on-surface-variant flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mt-1 ml-1" data-icon="person">person</span>
+</div>
+                                    Elena Rodriguez
+                                </td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[85%]"></div>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold w-12 text-right">85%</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-container">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="trending_flat">trending_flat</span>
+</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-bright transition-colors h-[72px]">
+<td class="px-lg py-md">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-caption text-caption font-bold text-on-surface">4</div>
+</td>
+<td class="px-lg py-md font-h2 text-h2 text-on-background text-[18px]">South Central</td>
+<td class="px-lg py-md text-on-surface-variant flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container overflow-hidden">
+<img alt="David Wright" class="w-full h-full object-cover" data-alt="professional portrait of a mature man in a grey suit looking thoughtful" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5jMR0U_ii_lgPcV3hMhsN219dXeMflExAdpmPBVjGlrnkGLW_vKSn_cFqdVpbMHScbsEqW7iR_y9VYu6SjrPK90tBuXvfTZm1OU--ha1uCESJrpxo_3WQo3b0PJRHMkNdx8mW9Mnq-qqY8Eq3euD2W8QptS8BTn2x_MAAjaOZoAAuCVPF-D8HJW1jYOUwDZ3nclqSLCFv8FvrGCax-2PGUWEWmArzM0cnp-cr8t_WtvwGEeTXxRwKcETHYEd8lRQGiVcjMEbX6n3Q"/>
+</div>
+                                    David Wright
+                                </td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full w-[76%]"></div>
+</div>
+<span class="font-caption text-caption text-on-surface font-semibold w-12 text-right">76%</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-error-container">
+<span class="material-symbols-outlined text-error text-sm" data-icon="trending_down">trending_down</span>
+</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>

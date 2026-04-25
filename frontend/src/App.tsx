@@ -1,99 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from './store/useStore';
-import { AadharModal } from './components/Auth/AadharModal';
+import { AuthModal } from './components/Auth/AuthModal';
 import { MapContainer } from './components/Map/MapContainer';
 import { KanbanBoard } from './components/Kanban/Board';
 import { Leaderboard } from './components/Leaderboard/Leaderboard';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Sidebar } from './components/Sidebar/Sidebar';
+import { TopBar } from './components/TopBar/TopBar';
+
+type View = 'MAP' | 'KANBAN' | 'LEADERBOARD';
 
 function App() {
-  const { currentUser, fetchIssues } = useStore();
-  const [view, setView] = useState<'MAP' | 'KANBAN'>('MAP');
+  const { currentUser, fetchIssues, isLiveMode, toggleLiveMode } = useStore();
+  const [view, setView] = useState<View>('MAP');
 
   useEffect(() => {
     if (currentUser) {
       fetchIssues();
-      const interval = setInterval(() => fetchIssues(), 5000);
+      const interval = setInterval(fetchIssues, 30000);
       return () => clearInterval(interval);
     }
   }, [currentUser, fetchIssues]);
 
+  if (!currentUser) return <AuthModal />;
+
+  const isMLA = currentUser.role === 'ROLE_MLA';
+
   return (
-    <div className="flex h-screen w-screen bg-apple-bg text-apple-text overflow-hidden font-sans">
-      {!currentUser && <AadharModal />}
+    <div className="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+      {/* Sidebar - fixed left */}
+      <Sidebar currentView={view} onNavigate={setView} isMLA={isMLA} />
 
-      <div className="flex-1 flex flex-col relative">
-        {currentUser && (
-          <header className="absolute top-0 left-0 right-0 z-[1000] p-8 flex justify-between items-start pointer-events-none">
-            <div className="pointer-events-auto">
-              <h1 className="text-[24pt] font-semibold tracking-tight leading-none text-apple-text">Polis</h1>
-              <div className="flex items-center gap-2 mt-2">
-                <div className={`w-2 h-2 rounded-full ${currentUser.role === 'ROLE_MLA' ? 'bg-apple-new' : 'bg-apple-resolved'} animate-pulse`} />
-                <span className="text-[10pt] font-bold text-apple-secondary uppercase tracking-widest">
-                  {currentUser.role === 'ROLE_MLA' ? `MLA / ${currentUser.mla_id?.replace(/_/g, ' ')}` : `Citizen / ${currentUser.username}`}
-                </span>
-              </div>
+      {/* Main content wrapper - takes remaining space with ml-64 (256px) for the fixed sidebar */}
+      <div className="flex-1 ml-64 flex flex-col min-w-0">
+        <TopBar onLiveToggle={toggleLiveMode} isLiveMode={isLiveMode} />
+
+        {/* ─── Main content ─── All views mounted; CSS visibility toggle ──────── */}
+        {/* This prevents Leaflet from being destroyed/remounted on nav changes,   */}
+        {/* which caused the world-zoom bug and nav click-through issues.           */}
+        <main className="flex-1 overflow-hidden" style={{ position: 'relative' }}>
+
+          {/* MAP — permanently mounted */}
+          <div className="absolute inset-0" style={{
+            visibility: view === 'MAP' ? 'visible' : 'hidden',
+            zIndex: view === 'MAP' ? 1 : 0,
+            pointerEvents: view === 'MAP' ? 'auto' : 'none',
+          }}>
+            <MapContainer />
+          </div>
+
+          {/* KANBAN — MLA only */}
+          {isMLA && (
+            <div className="absolute inset-0 bg-background" style={{
+              visibility: view === 'KANBAN' ? 'visible' : 'hidden',
+              zIndex: view === 'KANBAN' ? 10 : 0,
+              pointerEvents: view === 'KANBAN' ? 'auto' : 'none',
+            }}>
+              <KanbanBoard />
             </div>
+          )}
 
-            {currentUser.role === 'ROLE_MLA' && (
-              <div className="pointer-events-auto bg-apple-surface/80 backdrop-blur-xl p-1.5 rounded-full border border-apple-border flex gap-1 shadow-2xl">
-                <button
-                  onClick={() => setView('MAP')}
-                  className={`px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-500 ${view === 'MAP' ? 'bg-apple-text text-apple-surface shadow-xl' : 'text-apple-secondary hover:text-apple-text hover:bg-black/5'}`}
-                >
-                  Cartography
-                </button>
-                <button
-                  onClick={() => setView('KANBAN')}
-                  className={`px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-500 ${view === 'KANBAN' ? 'bg-apple-text text-apple-surface shadow-xl' : 'text-apple-secondary hover:text-apple-text hover:bg-black/5'}`}
-                >
-                  Pipeline
-                </button>
-              </div>
-            )}
+          {/* LEADERBOARD */}
+          <div className="absolute inset-0 bg-background overflow-y-auto" style={{
+            visibility: view === 'LEADERBOARD' ? 'visible' : 'hidden',
+            zIndex: view === 'LEADERBOARD' ? 10 : 0,
+            pointerEvents: view === 'LEADERBOARD' ? 'auto' : 'none',
+          }}>
+            <Leaderboard />
+          </div>
 
-            <div className="pointer-events-auto flex flex-col items-end">
-              <span className="text-[10pt] font-mono text-apple-secondary bg-apple-surface px-3 py-1 rounded-full border border-apple-border shadow-sm">
-                {currentUser.citizenHash}
-              </span>
-            </div>
-          </header>
-        )}
-
-        <div className="flex-1 relative overflow-hidden">
-          <AnimatePresence mode="wait">
-            {view === 'MAP' ? (
-              <motion.div
-                key="map"
-                initial={{ opacity: 0, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, filter: 'blur(10px)' }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0"
-              >
-                <MapContainer />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="kanban"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0"
-              >
-                <KanbanBoard />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        </main>
       </div>
-
-      {currentUser && (
-        <aside className="w-[400px] h-full flex-shrink-0 z-20 relative">
-          <Leaderboard />
-        </aside>
-      )}
     </div>
   );
 }

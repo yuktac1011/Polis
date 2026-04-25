@@ -104,5 +104,23 @@ module.exports = {
 }
 ```
 
+### VII. Visual Specs for Advanced Features (The "WOW" Factor)
+To maintain the "Apple-System" feel while adding "Jarvis" energy:
+
+#### 1. Live City Pulse (Dynamic Energy)
+*   **The Glow:** Use a `filter: drop-shadow(0 0 8px rgba(5, 150, 105, 0.4))` for resolved issues and similar for others when in Live Mode.
+*   **Activity Feed:** A transparent sidebar (`backdrop-filter: blur(10px)`) with a subtle "Glass" border. Each entry should slide in from the bottom with a `0.2s` spring.
+
+#### 2. Command Center (Jarvis Mode)
+*   **Interface:** A full-screen or large modal overlay with a dark glass effect (`rgba(0,0,0,0.8)`).
+*   **Scanning Effect:** When a query is entered, a horizontal "laser" line (1px white gradient) should sweep across the SVG map to simulate a system scan.
+*   **Typography:** Use the **Mono** font (JetBrains Mono) for the search results to give it a "Terminal" feel.
+
+#### 3. Smart Clustering (Map Professionalism)
+*   **Cluster Design:** A circular node with a thick white border and a background that blends the colors of the contained issues.
+*   **Interaction:** On click, the cluster should "explode" outward into individual pins using `framer-motion`'s `layout` prop for a fluid transition.
+
+---
+
 ### The Presentation Pitch Note:
-When presenting to the judges, refer to the UI as **"Institutional Minimalist."** Explain that you avoided flashy colors to ensure the data (the issues) remains the focal point, reflecting the serious nature of civic governance.
+When presenting to the judges, refer to the UI as **"Institutional Minimalist."** Explain that you avoided flashy colors to ensure the data (the issues) remains the focal point, reflecting the serious nature of civic governance. Mention that the **Command Center** and **Live Mode** provide "Actionable Intelligence" for a real-time city response.
