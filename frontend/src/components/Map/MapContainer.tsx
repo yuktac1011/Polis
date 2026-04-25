@@ -27,8 +27,8 @@ const projectFromSVG = (x: number, y: number) => ({
 // Using the Material 3 colors from tailwind.config
 const STATUS_COLORS: Record<string, { bg: string, ring: string, animation: string }> = {
   New: { bg: '#ba1a1a', ring: '#ba1a1a33', animation: 'animate-ping' }, // error
-  'In Progress': { bg: '#002113', ring: '#0021131a', animation: 'animate-pulse' }, // tertiary-container
-  Resolved: { bg: '#76777d', ring: 'transparent', animation: '' }, // outline
+  'In Progress': { bg: '#4edea3', ring: 'rgba(78, 222, 163, 0.3)', animation: 'animate-pulse' }, // tertiary-fixed-dim
+  Resolved: { bg: '#009668', ring: 'rgba(0, 150, 104, 0.2)', animation: '' }, // green
   Draft: { bg: '#000000', ring: '#00000033', animation: 'animate-pulse' }, // primary
 };
 

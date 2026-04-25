@@ -3,7 +3,7 @@ import cors from 'cors';
 import { z, ZodError } from 'zod';
 import crypto from 'crypto';
 import db, { initDb, getAllMlas } from './db';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 const app = express();
 app.use(cors());
@@ -85,7 +85,7 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
     });
   } catch (err) {
     if (err instanceof ZodError) {
-      return res.status(400).json({ error: err.errors[0].message });
+      return res.status(400).json({ error: err.issues[0].message });
     }
     console.error('[Register]', err);
     return res.status(500).json({ error: 'Registration failed' });
@@ -124,7 +124,7 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
     });
   } catch (err) {
     if (err instanceof ZodError) {
-      return res.status(400).json({ error: err.errors[0].message });
+      return res.status(400).json({ error: err.issues[0].message });
     }
     console.error('[Login]', err);
     return res.status(500).json({ error: 'Login failed' });
@@ -179,7 +179,7 @@ app.post('/api/issues', (req: Request, res: Response) => {
     return res.status(201).json({ success: true, id: info.lastInsertRowid });
   } catch (err) {
     if (err instanceof ZodError) {
-      return res.status(400).json({ error: err.errors[0].message });
+      return res.status(400).json({ error: err.issues[0].message });
     }
     console.error('[Create Issue]', err);
     return res.status(500).json({ error: 'Failed to create issue' });
@@ -206,6 +206,41 @@ app.patch('/api/issues/:id', (req: Request, res: Response) => {
   }
 });
 
+app.post('/api/issues/batch', (req: Request, res: Response) => {
+  const { ids, status, resolution_summary } = req.body;
+  if (!Array.isArray(ids) || !status) {
+    return res.status(400).json({ error: 'ids (array) and status are required' });
+  }
+  try {
+    const stmt = db.prepare('UPDATE issues SET status = ?, resolution_summary = ? WHERE id = ?');
+    db.exec('BEGIN');
+    for (const id of ids) {
+      stmt.run(status, resolution_summary || null, id);
+    }
+    db.exec('COMMIT');
+    return res.json({ success: true, count: ids.length });
+  } catch (err) {
+    db.exec('ROLLBACK');
+    console.error('[Batch Update]', err);
+    return res.status(500).json({ error: 'Batch update failed' });
+  }
+});
+
+app.patch('/api/issues/:id/reopen', (req: Request, res: Response) => {
+  try {
+    const result = db
+      .prepare("UPDATE issues SET status = 'In Progress', resolution_summary = NULL WHERE id = ?")
+      .run(req.params.id);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Issue not found' });
+    }
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('[Reopen Issue]', err);
+    return res.status(500).json({ error: 'Reopen failed' });
+  }
+});
+
 app.post('/api/issues/:id/upvote', (req: Request, res: Response) => {
   const { citizen_hash } = req.body;
   if (!citizen_hash) return res.status(400).json({ error: 'citizen_hash is required' });
@@ -217,6 +252,26 @@ app.post('/api/issues/:id/upvote', (req: Request, res: Response) => {
   } catch (err) {
     console.error('[Upvote]', err);
     return res.status(500).json({ error: 'Upvote failed' });
+  }
+});
+
+app.post('/api/issues/group', (req: Request, res: Response) => {
+  const { primaryId, otherIds } = req.body;
+  if (!primaryId || !Array.isArray(otherIds)) {
+    return res.status(400).json({ error: 'primaryId and otherIds (array) are required' });
+  }
+  try {
+    const stmt = db.prepare("UPDATE issues SET parent_issue_id = ?, status = 'Resolved', resolution_summary = 'Merged into primary issue #' || ? WHERE id = ?");
+    db.exec('BEGIN');
+    for (const id of otherIds) {
+      stmt.run(primaryId, primaryId, id);
+    }
+    db.exec('COMMIT');
+    return res.json({ success: true, grouped: otherIds.length });
+  } catch (err) {
+    db.exec('ROLLBACK');
+    console.error('[Group Issues]', err);
+    return res.status(500).json({ error: 'Grouping failed' });
   }
 });
 

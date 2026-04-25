@@ -16,6 +16,8 @@ export const KanbanBoard: React.FC = () => {
   const [resolutionTarget, setResolutionTarget] = useState<Issue | null>(null);
   const [summary, setSummary] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const { batchUpdateIssues, groupIssues } = useStore();
 
   const isMLA = currentUser?.role === 'ROLE_MLA';
   const { selectedConstituency } = useStore();
@@ -63,6 +65,28 @@ export const KanbanBoard: React.FC = () => {
     setSubmitting(false);
   };
 
+  const toggleSelection = (id: number) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const handleBatchAction = async (status: string) => {
+    if (selectedIds.length === 0) return;
+    setSubmitting(true);
+    await batchUpdateIssues(selectedIds, status);
+    setSelectedIds([]);
+    setSubmitting(false);
+  };
+
+  const handleGroup = async () => {
+    if (selectedIds.length < 2) return;
+    setSubmitting(true);
+    // Use the first one as primary
+    const [primary, ...others] = selectedIds;
+    await groupIssues(primary, others);
+    setSelectedIds([]);
+    setSubmitting(false);
+  };
+
   return (
     <div className="flex-1 p-xl w-full h-full overflow-x-auto flex flex-col">
       {/* Board Header */}
@@ -78,6 +102,54 @@ export const KanbanBoard: React.FC = () => {
           </button>
         )}
       </div>
+
+      {/* Batch Action Bar */}
+      <AnimatePresence>
+        {selectedIds.length > 0 && (
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-lg bg-surface-container-highest px-xl py-md rounded-2xl border border-primary/20 shadow-2xl backdrop-blur-xl"
+          >
+            <div className="flex items-center gap-md pr-lg border-r border-outline-variant/30">
+              <span className="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold">{selectedIds.length}</span>
+              <p className="font-body-md font-semibold text-on-surface">Issues Selected</p>
+            </div>
+            
+            <div className="flex items-center gap-md">
+              <button 
+                onClick={() => handleBatchAction('In Progress')}
+                className="flex items-center gap-sm px-4 py-2 hover:bg-surface-variant rounded-lg transition-colors text-sm font-bold text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">history</span>
+                Start Resolution
+              </button>
+              <button 
+                onClick={() => handleBatchAction('Resolved')}
+                className="flex items-center gap-sm px-4 py-2 hover:bg-surface-variant rounded-lg transition-colors text-sm font-bold text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">check_circle</span>
+                Batch Resolve
+              </button>
+              <button 
+                onClick={handleGroup}
+                disabled={selectedIds.length < 2}
+                className="flex items-center gap-sm px-4 py-2 hover:bg-surface-variant rounded-lg transition-colors text-sm font-bold text-on-surface disabled:opacity-30"
+              >
+                <span className="material-symbols-outlined text-[20px]">layers</span>
+                Group/Merge
+              </button>
+              <button 
+                onClick={() => setSelectedIds([])}
+                className="flex items-center gap-sm px-4 py-2 text-error hover:bg-error/10 rounded-lg transition-colors text-sm font-bold"
+              >
+                Clear
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Kanban Columns Container */}
       <div className="flex gap-lg h-full items-start pb-xl overflow-y-hidden">
@@ -111,6 +183,8 @@ export const KanbanBoard: React.FC = () => {
                       onDragStart={(e) => handleDragStart(e, issue)}
                       onUpvote={() => upvoteIssue(issue.id)}
                       isDraggable={isMLA}
+                      isSelected={selectedIds.includes(issue.id)}
+                      onSelect={toggleSelection}
                     />
                   ))}
                 </AnimatePresence>

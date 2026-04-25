@@ -10,8 +10,9 @@ import { CommandCenter } from './components/CommandCenter/CommandCenter';
 import { LandingPage } from './components/Landing/LandingPage';
 import { AnalyticsView } from './components/Analytics/AnalyticsView';
 import { ArchiveView } from './components/Archive/ArchiveView';
+import { MyIssues } from './components/MyIssues/MyIssues';
 
-export type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE';
+export type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE' | 'MY_ISSUES';
 
 function App() {
   const { currentUser, fetchIssues, isLiveMode, toggleLiveMode } = useStore();
@@ -68,6 +69,14 @@ function App() {
             pointerEvents: view === 'KANBAN' ? 'auto' : 'none',
           }}>
             <KanbanBoard />
+          </div>
+
+          <div className="absolute inset-0 bg-background overflow-y-auto" style={{
+            visibility: view === 'MY_ISSUES' ? 'visible' : 'hidden',
+            zIndex: view === 'MY_ISSUES' ? 10 : 0,
+            pointerEvents: view === 'MY_ISSUES' ? 'auto' : 'none',
+          }}>
+             <MyIssues />
           </div>
 
           {/* LEADERBOARD */}

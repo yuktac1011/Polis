@@ -1,6 +1,5 @@
-
-
-type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE';
+import { useStore } from '../../store/useStore';
+import type { View } from '../../App';
 
 interface SidebarProps {
   currentView: View | any;
@@ -8,6 +7,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ currentView, onNavigate }: SidebarProps) {
+  const { currentUser } = useStore();
+  const isMLA = currentUser?.role === 'ROLE_MLA';
   // We'll map the UI design links to our functional views
   const navItems = [
     {
@@ -24,9 +25,15 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
     },
     {
       id: 'KANBAN',
-      label: 'Civic Issues',
+      label: isMLA ? 'Manage Issues' : 'Civic Issues',
       icon: 'report_problem',
       show: true,
+    },
+    {
+      id: 'MY_ISSUES',
+      label: 'My Contributions',
+      icon: 'person',
+      show: !isMLA,
     },
     {
       id: 'MAP',
