@@ -1,14 +1,13 @@
 
 
-type View = 'MAP' | 'KANBAN' | 'LEADERBOARD';
+type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE';
 
 interface SidebarProps {
-  currentView: View;
+  currentView: View | any;
   onNavigate: (view: View) => void;
-  isMLA: boolean;
 }
 
-export function Sidebar({ currentView, onNavigate, isMLA }: SidebarProps) {
+export function Sidebar({ currentView, onNavigate }: SidebarProps) {
   // We'll map the UI design links to our functional views
   const navItems = [
     {
@@ -22,13 +21,12 @@ export function Sidebar({ currentView, onNavigate, isMLA }: SidebarProps) {
       label: 'Analytics',
       icon: 'monitoring',
       show: true,
-      disabled: true,
     },
     {
       id: 'KANBAN',
       label: 'Civic Issues',
       icon: 'report_problem',
-      show: isMLA,
+      show: true,
     },
     {
       id: 'MAP',
@@ -41,7 +39,6 @@ export function Sidebar({ currentView, onNavigate, isMLA }: SidebarProps) {
       label: 'Project Archive',
       icon: 'inventory_2',
       show: true,
-      disabled: true,
     },
   ];
 
@@ -62,18 +59,6 @@ export function Sidebar({ currentView, onNavigate, isMLA }: SidebarProps) {
       <nav className="flex-1 flex flex-col gap-xs">
         {navItems.filter((i) => i.show).map((item) => {
           const isActive = currentView === item.id;
-          if (item.disabled) {
-            return (
-              <div
-                key={item.label}
-                className="flex items-center gap-sm px-3 py-2 text-slate-400 dark:text-slate-600 rounded-lg cursor-not-allowed opacity-60"
-                title="Coming soon"
-              >
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <span>{item.label}</span>
-              </div>
-            );
-          }
 
           return (
             <button

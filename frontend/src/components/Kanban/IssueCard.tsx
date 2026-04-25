@@ -4,12 +4,10 @@ import { motion } from 'framer-motion';
 interface IssueCardProps {
   issue: Issue;
   col: { color: string; border: string; bg: string };
-  onDragStart: () => void;
+  onDragStart: (e: any) => void;
   onUpvote?: () => void;
-  currentUserHash?: string;
+  isDraggable?: boolean;
 }
-
-
 
 // Generate a pseudo-ID like INF-204 based on issue.id and category
 const getTicketId = (issue: Issue) => {
@@ -18,14 +16,14 @@ const getTicketId = (issue: Issue) => {
   return `${prefix}-${num.toString().padStart(3, '0')}`;
 };
 
-export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote }) => {
+export const IssueCard: React.FC<IssueCardProps> = ({ issue, col, onDragStart, onUpvote, isDraggable = true }) => {
   const isResolved = issue.status === 'Resolved';
 
   return (
     <motion.div
       layout
       layoutId={`issue-${issue.id}`}
-      draggable
+      draggable={isDraggable}
       onDragStart={onDragStart}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}

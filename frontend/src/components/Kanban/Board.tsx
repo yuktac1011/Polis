@@ -17,25 +17,35 @@ export const KanbanBoard: React.FC = () => {
   const [summary, setSummary] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  if (currentUser?.role !== 'ROLE_MLA') return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-background gap-4">
-      <div className="w-16 h-16 rounded-full border-2 border-outline flex items-center justify-center">
-        <span className="material-symbols-outlined text-[32px] text-on-surface-variant">lock</span>
-      </div>
-      <p className="font-h1 text-[24px] text-on-surface">MLA Access Required</p>
-      <p className="font-body-md text-on-surface-variant">This view is only available to elected officials.</p>
-    </div>
-  );
+  const isMLA = currentUser?.role === 'ROLE_MLA';
+  const { selectedConstituency } = useStore();
+  
+  // MLAs see their own ward; Citizens see selected ward on map, or all if none selected
+  const displayIssues = isMLA 
+    ? issues.filter((i) => i.constituency_id === currentUser.mla_id)
+    : selectedConstituency 
+      ? issues.filter(i => i.constituency_id === selectedConstituency)
+      : issues;
 
-  const mlaIssues = issues.filter((i) => i.constituency_id === currentUser.mla_id);
+  const handleDragStart = (e: React.DragEvent, issue: Issue) => {
+    setDraggedIssue(issue);
+    e.dataTransfer.setData('text/plain', issue.id.toString());
+  };
+  
+  const handleDragOver = (e: React.DragEvent, col: string) => {
+    e.preventDefault();
+    if (isMLA) setDragOverCol(col);
+  };
 
-  const handleDragStart = (issue: Issue) => setDraggedIssue(issue);
-  const handleDragOver = (e: React.DragEvent, col: string) => { e.preventDefault(); setDragOverCol(col); };
   const handleDragLeave = () => setDragOverCol(null);
 
   const handleDrop = async (status: string) => {
     setDragOverCol(null);
-    if (!draggedIssue || draggedIssue.status === status) { setDraggedIssue(null); return; }
+    if (!isMLA || !draggedIssue || draggedIssue.status === status) { 
+      setDraggedIssue(null); 
+      return; 
+    }
+    
     if (status === 'Resolved') {
       setResolutionTarget(draggedIssue);
     } else {
@@ -61,16 +71,18 @@ export const KanbanBoard: React.FC = () => {
           <h2 className="font-h1 text-h1 text-on-surface">Active Interventions</h2>
           <p className="font-body-md text-body-md text-on-surface-variant mt-xs">Tracking reported civic infrastructure issues and resolutions.</p>
         </div>
-        <button className="flex items-center gap-sm h-12 px-lg bg-primary text-on-primary font-caption text-caption rounded-xl hover:opacity-90 transition-opacity">
-          <span className="material-symbols-outlined text-[20px]">add</span>
-          New Ticket
-        </button>
+        {isMLA && (
+          <button className="flex items-center gap-sm h-12 px-lg bg-primary text-on-primary font-caption text-caption rounded-xl hover:opacity-90 transition-opacity">
+            <span className="material-symbols-outlined text-[20px]">add</span>
+            New Ticket
+          </button>
+        )}
       </div>
 
       {/* Kanban Columns Container */}
       <div className="flex gap-lg h-full items-start pb-xl overflow-y-hidden">
         {COLUMNS.map((col) => {
-          const colIssues = mlaIssues.filter((i) => i.status === col.id);
+          const colIssues = displayIssues.filter((i) => i.status === col.id);
           const isDragTarget = dragOverCol === col.id;
           return (
             <div
@@ -96,9 +108,9 @@ export const KanbanBoard: React.FC = () => {
                       key={issue.id}
                       issue={issue}
                       col={col}
-                      onDragStart={() => handleDragStart(issue)}
+                      onDragStart={(e) => handleDragStart(e, issue)}
                       onUpvote={() => upvoteIssue(issue.id)}
-                      currentUserHash={currentUser.citizenHash}
+                      isDraggable={isMLA}
                     />
                   ))}
                 </AnimatePresence>

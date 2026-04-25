@@ -187,11 +187,30 @@ export const Leaderboard: React.FC = () => {
                         {mla.constituency}
                         <span className="ml-2 text-xs font-body-md text-on-surface-variant">({mla.ward})</span>
                       </td>
-                      <td className="px-lg py-md text-on-surface-variant flex items-center gap-sm">
-                        <div className="w-6 h-6 rounded-full bg-surface-container overflow-hidden flex items-center justify-center">
-                          <span className="material-symbols-outlined text-on-surface-variant text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
+                      <td className="px-lg py-md text-on-surface-variant">
+                        <div className="flex items-center gap-sm">
+                          <div className="relative">
+                            <div className={`w-8 h-8 rounded-full overflow-hidden flex items-center justify-center ${index === 0 ? 'bg-[#F5C842]/20 text-[#D4AF37] ring-1 ring-[#F5C842]' : 'bg-surface-container text-on-surface-variant'}`}>
+                              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
+                            </div>
+                            {index === 0 && (
+                              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-surface rounded-full flex items-center justify-center">
+                                <span className="material-symbols-outlined text-[#D4AF37] text-[12px] fill">verified</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-on-surface flex items-center gap-1">
+                              {mla.name}
+                              {rate >= 80 && <span className="text-[12px]" title="Fast Resolver">⚡</span>}
+                              {(mla.resolved_issues * 50 + mla.in_progress_issues * 10) > 200 && <span className="text-[12px]" title="City Hero">🎖️</span>}
+                            </span>
+                            <span className="font-caption text-[11px] text-primary flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[12px]">toll</span>
+                              {mla.resolved_issues * 50 + mla.in_progress_issues * 10} pts
+                            </span>
+                          </div>
                         </div>
-                        {mla.name}
                       </td>
                       <td className="px-lg py-md">
                         <div className="flex items-center gap-md">

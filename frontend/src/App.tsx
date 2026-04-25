@@ -3,15 +3,20 @@ import { useStore } from './store/useStore';
 import { AuthModal } from './components/Auth/AuthModal';
 import { MapContainer } from './components/Map/MapContainer';
 import { KanbanBoard } from './components/Kanban/Board';
-import { Leaderboard } from './components/Leaderboard/Leaderboard';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { TopBar } from './components/TopBar/TopBar';
+import { Leaderboard } from './components/Leaderboard/Leaderboard';
+import { CommandCenter } from './components/CommandCenter/CommandCenter';
+import { LandingPage } from './components/Landing/LandingPage';
+import { AnalyticsView } from './components/Analytics/AnalyticsView';
+import { ArchiveView } from './components/Archive/ArchiveView';
 
-type View = 'MAP' | 'KANBAN' | 'LEADERBOARD';
+export type View = 'MAP' | 'KANBAN' | 'LEADERBOARD' | 'ANALYTICS' | 'ARCHIVE';
 
 function App() {
   const { currentUser, fetchIssues, isLiveMode, toggleLiveMode } = useStore();
   const [view, setView] = useState<View>('MAP');
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -21,14 +26,22 @@ function App() {
     }
   }, [currentUser, fetchIssues]);
 
-  if (!currentUser) return <AuthModal />;
+  if (!currentUser && !showAuth) {
+    return <LandingPage onEnter={() => setShowAuth(true)} />;
+  }
 
-  const isMLA = currentUser.role === 'ROLE_MLA';
+  if (!currentUser && showAuth) {
+    return <AuthModal onBack={() => setShowAuth(false)} />;
+  }
+
+  if (!currentUser) return null;
+
+
 
   return (
     <div className="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
       {/* Sidebar - fixed left */}
-      <Sidebar currentView={view} onNavigate={setView} isMLA={isMLA} />
+      <Sidebar currentView={view} onNavigate={setView} />
 
       {/* Main content wrapper - takes remaining space with ml-64 (256px) for the fixed sidebar */}
       <div className="flex-1 ml-64 flex flex-col min-w-0">
@@ -48,16 +61,14 @@ function App() {
             <MapContainer />
           </div>
 
-          {/* KANBAN — MLA only */}
-          {isMLA && (
-            <div className="absolute inset-0 bg-background" style={{
-              visibility: view === 'KANBAN' ? 'visible' : 'hidden',
-              zIndex: view === 'KANBAN' ? 10 : 0,
-              pointerEvents: view === 'KANBAN' ? 'auto' : 'none',
-            }}>
-              <KanbanBoard />
-            </div>
-          )}
+          {/* KANBAN — Read-only for citizens, interactive for MLAs */}
+          <div className="absolute inset-0 bg-background" style={{
+            visibility: view === 'KANBAN' ? 'visible' : 'hidden',
+            zIndex: view === 'KANBAN' ? 10 : 0,
+            pointerEvents: view === 'KANBAN' ? 'auto' : 'none',
+          }}>
+            <KanbanBoard />
+          </div>
 
           {/* LEADERBOARD */}
           <div className="absolute inset-0 bg-background overflow-y-auto" style={{
@@ -68,8 +79,27 @@ function App() {
             <Leaderboard />
           </div>
 
+          {/* ANALYTICS */}
+          <div className="absolute inset-0 bg-background overflow-y-auto" style={{
+            visibility: view === 'ANALYTICS' ? 'visible' : 'hidden',
+            zIndex: view === 'ANALYTICS' ? 10 : 0,
+            pointerEvents: view === 'ANALYTICS' ? 'auto' : 'none',
+          }}>
+            <AnalyticsView />
+          </div>
+
+          {/* ARCHIVE */}
+          <div className="absolute inset-0 bg-background overflow-y-auto" style={{
+            visibility: view === 'ARCHIVE' ? 'visible' : 'hidden',
+            zIndex: view === 'ARCHIVE' ? 10 : 0,
+            pointerEvents: view === 'ARCHIVE' ? 'auto' : 'none',
+          }}>
+            <ArchiveView />
+          </div>
+
         </main>
       </div>
+      <CommandCenter />
     </div>
   );
 }

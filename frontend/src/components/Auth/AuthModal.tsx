@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 type AuthView = 'login' | 'register';
 
-export const AuthModal: React.FC = () => {
+interface AuthModalProps {
+  onBack?: () => void;
+}
+
+export const AuthModal: React.FC<AuthModalProps> = ({ onBack }) => {
   const [view, setView] = useState<AuthView>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -76,7 +80,15 @@ export const AuthModal: React.FC = () => {
           >
             {/* Header Area in Card */}
             <div className="p-xl pb-md flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant/50 flex items-center justify-center mb-lg shadow-sm">
+              <div className="relative w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant/50 flex items-center justify-center mb-lg shadow-sm">
+                {onBack && (
+                  <button 
+                    onClick={onBack}
+                    className="absolute -left-12 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+                  </button>
+                )}
                 <span className="material-symbols-outlined text-[32px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
                   shield_lock
                 </span>

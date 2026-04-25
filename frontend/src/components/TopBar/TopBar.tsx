@@ -7,7 +7,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onLiveToggle, isLiveMode }: TopBarProps) {
-  const { currentUser, logout } = useStore();
+  const { currentUser, logout, setCommandCenterOpen } = useStore();
   if (!currentUser) return null;
 
   const isMLA = currentUser.role === 'ROLE_MLA';
@@ -27,14 +27,16 @@ export function TopBar({ onLiveToggle, isLiveMode }: TopBarProps) {
             )}
           </div>
           
-          {/* Search Bar */}
-          <div className="relative hidden lg:block w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-            <input
-              type="text"
-              placeholder="Search data..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border-none rounded-lg text-sm focus:ring-2 focus:ring-slate-900 dark:focus:ring-slate-50 outline-none transition-all"
-            />
+          {/* Search Bar / Command Center Trigger */}
+          <div 
+            onClick={() => setCommandCenterOpen(true)}
+            className="relative hidden lg:block w-64 cursor-text group"
+          >
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm group-hover:text-primary transition-colors">search</span>
+            <div className="w-full pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border border-transparent rounded-lg text-sm text-slate-500 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-all flex items-center justify-between">
+              <span>Ask Polis...</span>
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-400">Cmd K</kbd>
+            </div>
           </div>
         </div>
 

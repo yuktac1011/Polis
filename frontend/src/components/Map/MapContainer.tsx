@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MapContainer as LeafletMap, TileLayer, GeoJSON, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useStore } from '../../store/useStore';
@@ -182,6 +184,45 @@ export const MapContainer: React.FC = () => {
   return (
     <div className="relative w-full h-[calc(100vh-64px)] overflow-hidden">
       
+      {/* ── Live Activity Feed (Right Side) ────────────────────────────────── */}
+      <AnimatePresence>
+        {isLiveMode && (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="absolute top-md right-md w-80 bg-surface/40 backdrop-blur-md border border-outline-variant/30 rounded-2xl shadow-lg p-md z-[1000] flex flex-col gap-sm max-h-[80vh] overflow-hidden"
+          >
+            <div className="flex items-center gap-2 mb-xs">
+              <span className="w-2 h-2 rounded-full bg-error animate-ping"></span>
+              <h2 className="font-h2 text-h2 text-on-surface text-[16px]">Live City Pulse</h2>
+            </div>
+            <div className="flex flex-col gap-2 overflow-y-auto scrollbar-hide pr-1">
+              <AnimatePresence initial={false}>
+                {issues.slice(0, 5).map((issue, idx) => (
+                  <motion.div
+                    key={issue.id}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 24, delay: idx * 0.1 }}
+                    className="p-3 bg-surface/60 rounded-xl border border-outline-variant/20 shadow-sm"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-label-caps text-label-caps text-primary uppercase">{issue.category}</span>
+                      <span className="text-[10px] text-on-surface-variant font-mono">
+                        {new Date(issue.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      </span>
+                    </div>
+                    <p className="font-body-md text-sm text-on-surface leading-tight">{issue.title}</p>
+                    <p className="text-[10px] text-on-surface-variant mt-1 line-clamp-1">{issue.description}</p>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Dimming Overlay when reporting ─────────────────────────────────── */}
       <div className={`absolute inset-0 bg-inverse-surface/40 backdrop-blur-[2px] z-[400] transition-opacity duration-500 pointer-events-none ${isReporting ? 'opacity-100' : 'opacity-0'}`}></div>
 
@@ -265,32 +306,35 @@ export const MapContainer: React.FC = () => {
           onEachFeature={onEachFeature}
         />
 
-        {issues.map((issue) => {
-          const { lat, lng } = projectFromSVG(issue.x_coord, issue.y_coord);
-          return (
-            <Marker key={issue.id} position={[lat, lng]} icon={getMarkerIcon(issue.status)}>
-              <Popup className="custom-popup" maxWidth={280}>
-                <div className="p-1 font-body-md">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest">{issue.category}</span>
-                    <span className="font-label-caps text-label-caps font-bold px-2 py-0.5 rounded border border-outline-variant/50">
-                      {issue.status}
-                    </span>
-                  </div>
-                  <h4 className="font-h2 text-[16px] text-on-surface mb-1 leading-tight">{issue.title}</h4>
-                  <p className="font-caption text-caption text-on-surface-variant leading-snug mb-3">{issue.description}</p>
-                  <div className="flex justify-between items-center pt-2 border-t border-outline-variant/30">
-                    <span className="text-[10px] font-mono text-outline">#{issue.reporter_hash}</span>
-                    <div className="flex items-center gap-1 text-on-surface-variant">
-                      <span className="material-symbols-outlined text-[14px]">thumb_up</span>
-                      <span className="font-caption text-caption font-bold">{issue.upvotes}</span>
+        {/* @ts-ignore */}
+        <MarkerClusterGroup chunkedLoading maxClusterRadius={60}>
+          {issues.map((issue) => {
+            const { lat, lng } = projectFromSVG(issue.x_coord, issue.y_coord);
+            return (
+              <Marker key={issue.id} position={[lat, lng]} icon={getMarkerIcon(issue.status)}>
+                <Popup className="custom-popup" maxWidth={280}>
+                  <div className="p-1 font-body-md">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-label-caps text-label-caps text-secondary uppercase tracking-widest">{issue.category}</span>
+                      <span className="font-label-caps text-label-caps font-bold px-2 py-0.5 rounded border border-outline-variant/50">
+                        {issue.status}
+                      </span>
+                    </div>
+                    <h4 className="font-h2 text-[16px] text-on-surface mb-1 leading-tight">{issue.title}</h4>
+                    <p className="font-caption text-caption text-on-surface-variant leading-snug mb-3">{issue.description}</p>
+                    <div className="flex justify-between items-center pt-2 border-t border-outline-variant/30">
+                      <span className="text-[10px] font-mono text-outline">#{issue.reporter_hash}</span>
+                      <div className="flex items-center gap-1 text-on-surface-variant">
+                        <span className="material-symbols-outlined text-[14px]">thumb_up</span>
+                        <span className="font-caption text-caption font-bold">{issue.upvotes}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MarkerClusterGroup>
 
         {reportData && isReporting && (
           <Marker position={[reportData.lat, reportData.lng]} icon={getMarkerIcon('Draft', true)} />

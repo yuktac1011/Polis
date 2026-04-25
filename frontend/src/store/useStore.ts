@@ -53,6 +53,8 @@ interface StoreState {
   mlas: MLA[];
   isLiveMode: boolean;
   authError: string | null;
+  isCommandCenterOpen: boolean;
+  setCommandCenterOpen: (isOpen: boolean) => void;
 
   login: (email: string, password: string) => Promise<boolean>;
   register: (email: string, password: string, username: string, mlaCode?: string, mlaWardId?: string) => Promise<boolean>;
@@ -78,7 +80,9 @@ export const useStore = create<StoreState>((set, get) => ({
   mlas: [],
   isLiveMode: false,
   authError: null,
+  isCommandCenterOpen: false,
 
+  setCommandCenterOpen: (isOpen) => set({ isCommandCenterOpen: isOpen }),
   setAuthError: (err) => set({ authError: err }),
 
   login: async (email, password) => {
