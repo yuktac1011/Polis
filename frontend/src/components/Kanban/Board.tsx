@@ -3,10 +3,10 @@ import { useStore, type Issue } from '../../store/useStore';
 import { IssueCard } from './IssueCard';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const COLUMNS: { id: string; label: string; color: string; border: string; bg: string }[] = [
-  { id: 'New', label: 'Pending Review', color: 'bg-secondary', border: 'border-l-secondary', bg: 'bg-surface-container-lowest' },
-  { id: 'In Progress', label: 'Active Resolution', color: 'bg-tertiary-fixed-dim', border: 'border-l-tertiary-fixed-dim', bg: 'bg-surface-container-lowest' },
-  { id: 'Resolved', label: 'Resolved', color: 'bg-outline', border: 'border-l-outline', bg: 'bg-surface-container-lowest opacity-75 hover:opacity-100' },
+const COLUMNS = [
+  { id: 'New', label: 'Pending Review', dot: '#6E6E73', accentBg: 'rgba(110,110,115,0.06)' },
+  { id: 'In Progress', label: 'Active Resolution', dot: '#F59E0B', accentBg: 'rgba(245,158,11,0.06)' },
+  { id: 'Resolved', label: 'Resolved', dot: '#10B981', accentBg: 'rgba(16,185,129,0.06)' },
 ];
 
 export const KanbanBoard: React.FC = () => {
@@ -103,21 +103,23 @@ export const KanbanBoard: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-xl w-full h-full overflow-x-auto flex flex-col">
+    <div className="flex-1 p-8 w-full h-full overflow-x-auto flex flex-col" style={{ background: '#F5F5F7' }}>
       {/* Board Header */}
-      <div className="flex items-center justify-between mb-lg flex-shrink-0">
+      <div className="flex items-center justify-between mb-8 flex-shrink-0">
         <div>
-          <h2 className="font-h1 text-h1 text-on-surface">Active Interventions</h2>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-xs">Tracking reported civic infrastructure issues and resolutions.</p>
+          <h2 className="text-3xl font-bold tracking-tight text-[#1D1D1F]">Active Interventions</h2>
+          <p className="text-sm text-[#6E6E73] mt-1">Drag cards between columns to update status. Issues auto-sync in real-time.</p>
         </div>
         {isMLA && (
-          <button 
+          <motion.button 
             onClick={() => setShowNewTicket(true)}
-            className="flex items-center gap-sm h-12 px-lg bg-primary text-on-primary font-caption text-caption rounded-xl hover:opacity-90 transition-opacity"
+            whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0,0,0,0.15)' }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-2 h-11 px-6 bg-[#1D1D1F] text-white text-sm font-bold rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
           >
-            <span className="material-symbols-outlined text-[20px]">add</span>
+            <span className="material-symbols-outlined text-[18px]">add</span>
             New Ticket
-          </button>
+          </motion.button>
         )}
       </div>
 
@@ -156,33 +158,41 @@ export const KanbanBoard: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex gap-lg h-full items-start pb-xl overflow-y-hidden">
+      <div className="flex gap-5 h-full items-start pb-8 overflow-y-hidden">
         {COLUMNS.map((col) => {
           const colIssues = displayIssues.filter((i) => i.status === col.id);
           const isDragTarget = dragOverCol === col.id;
           return (
             <div
               key={col.id}
-              className={`flex-1 min-w-[320px] max-w-[400px] h-full flex flex-col gap-md bg-surface-container-low/60 backdrop-blur-md rounded-xl p-md border border-outline-variant/50 transition-all duration-200 ${isDragTarget ? 'scale-[1.01] border-primary' : ''}`}
+              className="flex-1 min-w-[300px] max-w-[420px] h-full flex flex-col rounded-3xl overflow-hidden transition-all duration-200"
+              style={{
+                background: isDragTarget ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.7)',
+                border: isDragTarget ? '1.5px solid #1D1D1F' : '1px solid rgba(210,210,215,0.5)',
+                boxShadow: isDragTarget ? '0 0 0 4px rgba(29,29,31,0.05)' : '0 2px 12px rgba(0,0,0,0.04)',
+                backdropFilter: 'blur(12px)',
+                transform: isDragTarget ? 'scale(1.01)' : 'scale(1)',
+              }}
               onDragOver={(e) => handleDragOver(e, col.id)}
               onDragLeave={handleDragLeave}
               onDrop={() => handleDrop(col.id)}
             >
-              <div className="flex items-center justify-between px-xs pb-sm">
-                <div className="flex items-center gap-sm">
-                  <span className={`w-2 h-2 rounded-full ${col.color}`}></span>
-                  <h3 className="font-caption text-caption text-on-surface uppercase tracking-wider">{col.label}</h3>
+              {/* Column header */}
+              <div className="flex items-center justify-between px-5 py-4" style={{ background: col.accentBg, borderBottom: '1px solid rgba(210,210,215,0.4)' }}>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full" style={{ background: col.dot }} />
+                  <h3 className="text-xs font-bold text-[#1D1D1F] uppercase tracking-widest">{col.label}</h3>
                 </div>
-                <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-caps text-label-caps">{colIssues.length}</span>
+                <span className="text-xs font-bold text-[#6E6E73] bg-white/60 px-2.5 py-0.5 rounded-full border border-[#D2D2D7]/50">{colIssues.length}</span>
               </div>
 
-              <div className="flex flex-col gap-4 flex-1 overflow-y-auto pb-10 pr-1" style={{ scrollbarWidth: 'none' }}>
+              <div className="flex flex-col gap-3 flex-1 overflow-y-auto p-3 pb-10" style={{ scrollbarWidth: 'none' }}>
                 <AnimatePresence>
                   {colIssues.map((issue) => (
                     <IssueCard
                       key={issue.id}
                       issue={issue}
-                      col={col}
+                      col={col as any}
                       onDragStart={(e) => handleDragStart(e, issue)}
                       onUpvote={() => upvoteIssue(issue.id)}
                       isDraggable={isMLA}
@@ -193,11 +203,14 @@ export const KanbanBoard: React.FC = () => {
                 </AnimatePresence>
 
                 {colIssues.length === 0 && (
-                  <div className={`h-24 rounded-xl border-2 border-dashed flex items-center justify-center transition-all ${isDragTarget ? 'border-primary bg-primary/5' : 'border-outline-variant'}`}>
-                    <p className="font-label-caps text-label-caps uppercase text-on-surface-variant/60">
-                      {isDragTarget ? 'Drop here' : 'No issues'}
+                  <motion.div
+                    animate={isDragTarget ? { borderColor: '#1D1D1F', backgroundColor: 'rgba(29,29,31,0.02)' } : {}}
+                    className="h-24 rounded-2xl border-2 border-dashed border-[#D2D2D7] flex items-center justify-center transition-colors"
+                  >
+                    <p className="text-xs font-semibold text-[#6E6E73] uppercase tracking-wider">
+                      {isDragTarget ? '↓ Drop here' : 'No issues'}
                     </p>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </div>

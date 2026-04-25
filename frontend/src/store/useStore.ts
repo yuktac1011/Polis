@@ -89,7 +89,7 @@ interface StoreState {
   batchUpdateIssues: (ids: number[], status: string, summary?: string) => Promise<boolean>;
   setSelectedConstituency: (id: string | null) => void;
   toggleLiveMode: () => void;
-  initSocket: () => void;
+  initSocket: () => (() => void);
 }
 
 export const useStore = create<StoreState>((set, get) => ({

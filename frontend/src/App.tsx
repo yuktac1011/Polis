@@ -55,7 +55,7 @@ function App() {
       <Sidebar currentView={view} onNavigate={setView} />
 
       {/* Main content wrapper - takes remaining space with ml-64 (256px) for the fixed sidebar */}
-      <div className="flex-1 ml-64 flex flex-col min-w-0">
+      <div className="flex-1 ml-[72px] flex flex-col min-w-0">
         <TopBar onLiveToggle={toggleLiveMode} isLiveMode={isLiveMode} />
 
         {/* ─── Main content ─── All views mounted; CSS visibility toggle ──────── */}

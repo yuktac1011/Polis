@@ -1,4 +1,4 @@
-
+import { motion } from 'framer-motion';
 import { useStore } from '../../store/useStore';
 
 interface TopBarProps {
@@ -7,65 +7,79 @@ interface TopBarProps {
 }
 
 export function TopBar({ onLiveToggle, isLiveMode }: TopBarProps) {
-  const { currentUser, logout, setCommandCenterOpen } = useStore();
+  const { currentUser, setCommandCenterOpen } = useStore();
   if (!currentUser) return null;
 
   const isMLA = currentUser.role === 'ROLE_MLA';
 
   return (
-    <header className="bg-white/80 backdrop-blur-xl dark:bg-slate-900/80 text-slate-900 dark:text-slate-50 font-['Public_Sans'] antialiased docked full-width top-0 sticky z-50 border-b border-slate-200/60 dark:border-slate-800/60 shadow-[0_2px_15px_-3px_rgba(15,23,42,0.07)]">
-      <div className="flex items-center justify-between px-8 h-16 w-full max-w-container-max mx-auto">
-        {/* Brand / Left Side */}
-        <div className="flex items-center gap-lg">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">CivicPulse</h1>
-            {isLiveMode && (
-              <span className="text-[10px] font-mono text-error border border-error/30 bg-error/10 px-2 py-0.5 rounded flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-error animate-ping" />
-                LIVE
-              </span>
-            )}
-          </div>
-          
-          {/* Search Bar / Command Center Trigger */}
-          <div 
-            onClick={() => setCommandCenterOpen(true)}
-            className="relative hidden lg:block w-64 cursor-text group"
-          >
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm group-hover:text-primary transition-colors">search</span>
-            <div className="w-full pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border border-transparent rounded-lg text-sm text-slate-500 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-all flex items-center justify-between">
-              <span>Ask Polis...</span>
-              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-400">Cmd K</kbd>
-            </div>
-          </div>
-        </div>
+    <header
+      className="sticky top-0 z-30 h-14 flex items-center px-6 gap-4"
+      style={{
+        background: 'rgba(245,245,247,0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(210,210,215,0.5)',
+      }}
+    >
+      {/* Page title / breadcrumb area — empty, reserved */}
+      <div className="flex-1" />
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-md">
-          {/* Live Pulse Toggle (Adding it here for functionality) */}
-          <button
-            onClick={onLiveToggle}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors border ${
-              isLiveMode 
-                ? 'bg-error/10 text-error border-error/30' 
-                : 'bg-surface-container-low text-on-surface-variant border-outline-variant hover:bg-surface-variant'
-            }`}
-          >
-            {isLiveMode ? 'Pulse Active' : 'Start Pulse'}
-          </button>
+      {/* Search Trigger */}
+      <motion.button
+        onClick={() => setCommandCenterOpen(true)}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        className="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-[#6E6E73] transition-all"
+        style={{
+          background: 'rgba(255,255,255,0.8)',
+          border: '1px solid rgba(210,210,215,0.6)',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          minWidth: 220,
+        }}
+      >
+        <span className="material-symbols-outlined text-[16px]">search</span>
+        <span className="flex-1 text-left text-[13px] font-medium">Ask Polis...</span>
+        <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-[#F5F5F7] border border-[#D2D2D7] rounded text-[#6E6E73]">⌘K</kbd>
+      </motion.button>
 
-          <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 mx-xs"></div>
-          
-          {/* Profile */}
-          <div 
-            onClick={logout}
-            className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 cursor-pointer hover:ring-2 ring-slate-900 dark:ring-slate-50 transition-all bg-primary flex items-center justify-center text-on-primary font-bold text-xs"
-            title="Click to logout"
-          >
-            {currentUser.username.charAt(0).toUpperCase()}
-          </div>
+      {/* Live Pulse Toggle */}
+      <motion.button
+        onClick={onLiveToggle}
+        whileTap={{ scale: 0.95 }}
+        className="relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all"
+        style={
+          isLiveMode
+            ? { background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#EF4444' }
+            : { background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(210,210,215,0.6)', color: '#6E6E73' }
+        }
+      >
+        {isLiveMode && (
+          <motion.div
+            className="absolute inset-0 rounded-xl bg-red-400/10"
+            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        )}
+        <span className={`relative w-1.5 h-1.5 rounded-full ${isLiveMode ? 'bg-red-500' : 'bg-[#6E6E73]'}`}>
+          {isLiveMode && (
+            <motion.span
+              className="absolute inset-0 rounded-full bg-red-500"
+              animate={{ scale: [1, 2.5, 1], opacity: [1, 0, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          )}
+        </span>
+        <span className="relative">{isLiveMode ? 'Pulse Active' : 'Start Pulse'}</span>
+      </motion.button>
+
+      {/* Role badge */}
+      {isMLA && (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
+          <span className="material-symbols-outlined text-emerald-600 text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+          <span className="text-xs font-bold text-emerald-700">MLA</span>
         </div>
-      </div>
+      )}
     </header>
   );
 }
